@@ -1,0 +1,6 @@
+tail -n +2 accession.csv | cut -f 1 -d "," | sed -e "s/$/ /" > accDL.txt
+i=`cat accDL.txt`
+i1=`echo "${i//[$'\n']}"`
+datasets download genome accession ${i1}
+
+datasets summary genome taxon 562 --assembly-level contig,scaffold --assembly-source genbank --as-json-lines | dataformat tsv genome > ../raw/eColiMetaData.tsv
