@@ -17,12 +17,20 @@ library(ape)
 source("src_dNdS.r")
 
 a = as.character(read.FASTA(paste0("../data/",argv[1])))
+aSpace = numeric(length(a))
+for(i in 1:length(a)){
+    aSp0 = which(a[[i]]=="-")
+    aSpace[i] = length(aSp0)
+    a[[i]][aSp0] = ""
+    a[[i]] = strsplit(paste0(a[[i]], collapse = ""), "")[[1]]
+};rm(i, aSp0)
+
 p = read.csv(paste0("../data/",gsub("_db.fa",".csv",argv[1])), header = T)
 a0 = vector(mode="list", length = length(a))
 p0 = as.data.frame(matrix(0, nr = length(a), nc = 2))
 names(a0) = names(a)
 for(i in 1:length(a)){
-    i0 = as.numeric(p[grep(strsplit(names(a0)[i], ";")[[1]][1], p$clinical)[1],c("sample_start", "len")])
+    i0 = as.numeric(p[grep(strsplit(names(a0)[i], ";")[[1]][1], p$clinical)[1],c("sample_start", "len")]) - c(0,aSpace[i])
     # trim nucleotide overhang to match ORF
     i0 = c(i0[1], i0[1] + (4-ifelse(i0[1]%%3==0,3,i0[1]%%3))%%3, i0[2] - (i0[1]+i0[2]-1)%%3)
     a0[[i]] = nt2prot(paste0(a[[i]][(i0[2]-i0[1]+1):i0[3]], collapse = ""))
