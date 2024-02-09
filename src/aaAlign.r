@@ -14,6 +14,6 @@ pT = c("../data/")
 f = list.files(pT[1],"_dbAA.fa")
 for(i in 1:length(f)){
     a = msa(readAAStringSet(paste0(pT[1],f[i])), "ClustalOmega")
-    print(a, show = "complete")
+#    print(a, show = "complete")
     writeXStringSet(unmasked(a), file=paste0(pT[1],gsub("_dbAA", "-aaAlign", f[i])))
 };rm(i)
