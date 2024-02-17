@@ -2,7 +2,7 @@
 # author: ph-u
 # script: recolour_fadE.py
 # desc: recolour fadE peptide structure
-# in: "run /media/pokman/HPM-000/current/PhD/1_06_fadE/src/recolour_fadE.py" -> "loadBfacts [protein_file_basename]"
+# in: "run [full_path]/src/recolour_fadE.py" -> "loadBfacts [protein_file_basename]"
 # out: NA
 # arg: 0
 # date: 20240212
@@ -20,11 +20,11 @@
 #reinitialize
 
 ##### PyMol command sequence #####
-# load /media/pokman/HPM-000/current/PhD/1_06_fadE/data/D_1292130036_model-annotate_P1.pdb
-# load /media/pokman/HPM-000/current/PhD/1_06_fadE/data/D_1292130037_model-annotate_P1-coot1_waterDELETED.pdb
-# run /media/pokman/HPM-000/current/PhD/1_06_fadE/src/recolour_fadE.py
+# load [full_path]/data/D_1292130036_model-annotate_P1.pdb
+# load [full_path]/data/D_1292130037_model-annotate_P1-coot1_waterDELETED.pdb
+# run [full_path]/src/recolour_fadE.py
 # loadBfacts D_1292130036_model-annotate_P1
-# run /media/pokman/HPM-000/current/PhD/1_06_fadE/src/recolour_fadE.py
+# run [full_path]/src/recolour_fadE.py
 # loadBfacts D_1292130037_model-annotate_P1-coot1_waterDELETED
 # super D_1292130036_model-annotate_P1, D_1292130037_model-annotate_P1-coot1_waterDELETED
 # select br. all within 2 of sel
@@ -32,12 +32,12 @@
 
 ##### Get colour reference file #####
 import pandas
-d00 = pandas.read_csv("/media/pokman/HPM-000/current/PhD/1_06_fadE/res/02_PAO1_107_PA0506_fadE1_Cysticfibrosis.csv")
-d01 = pandas.read_csv("/media/pokman/HPM-000/current/PhD/1_06_fadE/res/02_PAO1_107_PA0508_fadE2_Cysticfibrosis.csv")
-d10 = pandas.read_csv("/media/pokman/HPM-000/current/PhD/1_06_fadE/res/02_PAO1_107_PA0506_fadE1_Others.csv")
-d11 = pandas.read_csv("/media/pokman/HPM-000/current/PhD/1_06_fadE/res/02_PAO1_107_PA0508_fadE2_Others.csv")
-d20 = pandas.read_csv("/media/pokman/HPM-000/current/PhD/1_06_fadE/res/02_PAO1_107_PA0506_fadE1_All.csv")
-d21 = pandas.read_csv("/media/pokman/HPM-000/current/PhD/1_06_fadE/res/02_PAO1_107_PA0508_fadE2_All.csv")
+d00 = pandas.read_csv("[full_path]/res/02_PAO1_107_PA0506_fadE1_Cysticfibrosis.csv")
+d01 = pandas.read_csv("[full_path]/res/02_PAO1_107_PA0508_fadE2_Cysticfibrosis.csv")
+d10 = pandas.read_csv("[full_path]/res/02_PAO1_107_PA0506_fadE1_Others.csv")
+d11 = pandas.read_csv("[full_path]/res/02_PAO1_107_PA0508_fadE2_Others.csv")
+d20 = pandas.read_csv("[full_path]/res/02_PAO1_107_PA0506_fadE1_All.csv")
+d21 = pandas.read_csv("[full_path]/res/02_PAO1_107_PA0508_fadE2_All.csv")
 
 ##### Reset residues colour #####
 # https://www.blopig.com/blog/2020/09/pymol-colouring-proteins-by-property/
