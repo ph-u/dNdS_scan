@@ -34,7 +34,7 @@ aMino$mEdian[which(aMino$p.adj > .05)] = median(a$dNdS)
 aMino$cOl = gray(1-(.1+.9*aMino$nRef/sqMax))
 
 pdf(paste0("../res/02_",argv[2],"_",argv[3],"_",argv[4],".pdf"), width = 21)
-plot(1:nrow(aMino), aMino$mEdian, col=aMino$cOl, type="p", pch=19, xlab = "Residue position", ylab = "Median dN/dS Contribution", main = paste(argv[3],"/",argv[4]), ylim = c(0, max(1,aMino$mEdian)))
+plot(1:nrow(aMino), aMino$mEdian, col=aMino$cOl, type="p", pch=19, xlab = "Residue position", ylab = "Reconstructed Median dN/dS", main = paste(argv[3],"/",argv[4]), ylim = c(0, max(1,aMino$mEdian)))
 lines(x=1:nrow(aMino), y=aMino$mEdian, col="#000000ff", lty=1)
 abline(h=1, col="#00ccff77", lty=2, lwd=3)
 invisible(dev.off())
