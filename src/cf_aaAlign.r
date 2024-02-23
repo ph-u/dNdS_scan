@@ -8,8 +8,8 @@
 # date: 20240210
 
 library(ape);library(msa)
-pT = paste0("../",c("../1_01_PA2668/",""),"data/")
-a = read.csv(paste0(pT[1],"metaData.csv"), header=T)
+pT = "../data/"
+a = read.csv(paste0(pT,"metaData.csv"), header=T)
 a[a=="missing"]=a[a==""]=NA
 
 ##### f: get rows for necessary category change #####
@@ -30,13 +30,13 @@ a$sOurce[is.na(a$sOurce)] = "Other infections"
 x = a$assemblyInfo.genbankAssmAccession[which(a$sOurce=="Cystic fibrosis")]
 for(i in list.files("../data","aaAlign.fa")){
     x0 = vector(mode="list", length = length(x))
-    a0 = as.character(read.FASTA(paste0(pT[2],i), type = "AA"))
+    a0 = as.character(read.FASTA(paste0(pT,i), type = "AA"))
     for(i0 in 1:length(x)){
         x1 = grep(x[i0], names(a0))
         x0[[i0]] = a0[[x1]]
         names(x0)[i0] = names(a0)[x1]
     }
-    write.FASTA(as.AAbin(x0), paste0(pT[2],gsub("aaAlign.fa","aaAlign-cfOnly.fa",i)))
-    a0 = msa(readAAStringSet(paste0(pT[2],gsub("aaAlign.fa","aaAlign-cfOnly.fa",i))), "ClustalOmega")
-    writeXStringSet(unmasked(a0), file=paste0(pT[2],gsub("aaAlign.fa","aaAlign-cfOnly.fa",i)))
+    write.FASTA(as.AAbin(x0), paste0(pT,gsub("aaAlign.fa","aaAlign-cfOnly.fa",i)))
+    a0 = msa(readAAStringSet(paste0(pT,gsub("aaAlign.fa","aaAlign-cfOnly.fa",i))), "ClustalOmega")
+    writeXStringSet(unmasked(a0), file=paste0(pT,gsub("aaAlign.fa","aaAlign-cfOnly.fa",i)))
 };rm(i,i0,x0,a0,x1)
