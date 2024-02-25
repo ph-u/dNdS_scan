@@ -53,10 +53,8 @@ rm ../data/${i5}_${i3}_t.csv
 ##### Resume run #####
 p0=`wc -l < ../data/${i5}_${i3}_iDx.csv`
 if [[ ${p0} -gt 0 ]];then
-    if [[ ! -f ../data/${i2}.fa ]];then
-        k0=`grep -e ${i3} ../data/${i5}_meta.txt | cut -f 1 -d ":"`
-	head -n $(( ${k0} +1 )) ../data/${i5}.fa | tail -n 2 > ../data/${i2}.fa
-    fi
+    k0=`grep -e "=${i3};" ../data/${i5}_meta.txt | cut -f 1 -d ":"`
+    head -n $(( ${k0} +1 )) ../data/${i5}.fa | tail -n 2 > ../data/${i2}.fa
     for i0 in `seq 1 ${p0}`;do
         i4=`head -n ${i0} ../data/${i5}_${i3}_iDx.csv | tail -n 1` # which run needs to repeat
         i1=`head -n ${i4} dbList.txt | tail -n 1` # which database corresponding to the run

@@ -25,7 +25,7 @@ i = nrow(bSum)
 x = c("gene", "clinical", "locus", "start", "end", "flank_befPc", "flank_aftPc", "dNdS","pN","pS","Nd","Sd","N","S")
 
 if(length(grep("%",bSum$locus[i]))==0 & length(pA) > (aaLen+1)*3){
-    cSeq = as.character(read.FASTA(paste0(pT[1],cLfa[grep(paste0(argv[1],"_",argv[2]), cLfa)])))
+    cSeq = as.character(read.FASTA(paste0(pT[1],cLfa[grep(paste0(argv[1],"_",argv[2],"_"), cLfa)])))
     c0 = cSeq[[grep(bSum$clinical[i], names(cSeq))[1]]]
     aaLen = ifelse(length(c0) > (aaLen+1)*3,aaLen,ifelse(length(c0) > (aaLen-aaLen%%2)/2*3,(aaLen-aaLen%%2)/2,ceiling(aaLen/10))) # 3-layered filter: 67, 33, 7 amino acids length window (modify if database match shorter than standard)
     if(bSum$dbSeqDir[i]=="minus"){for(i0 in 1:length(c0)){c0[i0] = nFlip(c0[i0])}}
