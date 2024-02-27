@@ -11,6 +11,7 @@ sTrain=$1; gEne=$2; iPcd=$3
 
 grep -v "^$" ../res/${sTrain}_${gEne}.txt > ../res/${sTrain}_${gEne}_t.txt
 mv ../res/${sTrain}_${gEne}_t.txt ../res/${sTrain}_${gEne}.txt
+[[ ! -f ../data/00_${sTrain}_${gEne}_db.fa ]]&&touch ../data/00_${sTrain}_${gEne}_db.fa
 
 if [[ `grep -e "No hits found" ../res/${sTrain}_${gEne}.txt | wc -l` -eq 0  ]];then
 ##### capture best match result #####
@@ -28,10 +29,12 @@ if [[ `grep -e "No hits found" ../res/${sTrain}_${gEne}.txt | wc -l` -eq 0  ]];t
     dbEd=`tail -n 1 ../data/00_${sTrain}_${gEne}_t0.txt | cut -f 4 -d " "`
     [[ ${dbSt} -gt ${dbEd}  ]]&&pM="minus"||pM="plus"
 
-    echo -e ">${iPcd};${dbSt}-${dbEd};${pM}" >> ../data/00_${sTrain}_${gEne}_db.fa
+    if [[ `grep -e ">${iPcd};${dbSt}-${dbEd};${pM}" ../data/00_${sTrain}_${gEne}_db.fa | wc -l` -eq 0 ]];then
+        echo -e ">${iPcd};${dbSt}-${dbEd};${pM}" >> ../data/00_${sTrain}_${gEne}_db.fa
+        dbSeq=`cat ../data/00_${sTrain}_${gEne}_t0.txt | cut -f 3 -d " "`
+        echo "${dbSeq//[$'\n']}" >> ../data/00_${sTrain}_${gEne}_db.fa
+    fi
 
-    dbSeq=`cat ../data/00_${sTrain}_${gEne}_t0.txt | cut -f 3 -d " "`
-    echo "${dbSeq//[$'\n']}" >> ../data/00_${sTrain}_${gEne}_db.fa
     [[ -f ../data/00_${sTrain}_${gEne}_t0.txt ]] && rm ../data/00_${sTrain}_${gEne}_t0.txt
     [[ -f ../data/00_${sTrain}_${gEne}_t.txt ]] && rm ../data/00_${sTrain}_${gEne}_t.txt
 fi

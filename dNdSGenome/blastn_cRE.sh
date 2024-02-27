@@ -76,5 +76,6 @@ if [[ ${p0} -gt 0 ]];then
     rm ../res/${i5}_${i3}.txt
     rm ../data/01_${i5}_${i3}_t.csv
 fi
+Rscript uniqDNAseq.r ${i5} ${i3}
 rm ../data/${i5}_${i3}_iDx.csv
 exit
