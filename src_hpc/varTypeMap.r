@@ -7,8 +7,8 @@
 # arg: 3
 # date: 20240229
 
-#argv = (commandArgs(T))
-argv = c("00_PAO1_107_PA2668.csv", "PAO1_107", "PA2668")
+argv = (commandArgs(T))
+#argv = c("00_PAO1_107_PA2668.csv", "PAO1_107", "PA2668")
 pT = paste0("../",c("data","res"),"/")
 library(lattice)
 
@@ -34,7 +34,7 @@ for(i in 1:2){
     }else{
         i0 = c("Loc", "cOuntry", "Sampling Country")
     }
-    pdf(paste0(pT[2],"04_",argv[2],"_",argv[3],"vtMap",i0[1],".pdf"), width = 10, height = 4)
+    pdf(paste0(pT[2],"04_",argv[2],"_",argv[3],"_vtMap",i0[1],".pdf"), width = 10, height = 4)
     print(levelplot(table(dNdS[,c(i0[2], "varType")]), scales=list(x=list(rot=90)), col.regions = gray(100:0/100), ylab = "Seq Variation Type", xlab = i0[3]))
     invisible(dev.off())
 };rm(i)

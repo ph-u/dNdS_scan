@@ -1,0 +1,22 @@
+aa,name,code,DNA,RNA
+F,phenylalanine,Phe,aaa;aag,uuu;uuc
+L,leucine,Leu,aat;aac;gaa;gag;gat;gac,uua;uug;cuu;cuc;cua;cug
+S,serine,Ser,aga;agg;agt;agc;tca;tcg,ucu;ucc;uca;ucg;agu;agc
+P,proline,Pro,gga;ggg;ggt;ggc,ccu;ccc;cca;ccg
+I,isoleucine,Ile,taa;tag;tat,auu;auc;aua
+M,methionine,Met,tac,aug
+T,threonine,Thr,tga;tgg;tgt;tgc,acu;acc;aca;acg
+V,valine,Val,caa;cag;cat;cac,guu;guc;gua;gug
+A,alanine,Ala,cga;cgg;cgt;cgc,gcu;gcc;gca;gcg
+C,cysteine,Cys,aca;acg,ugu;ugc
+W,tryptophan,Trp,acc,ugg
+Y,tyrosine,Tyr,ata;atg,uau;uac
+9,STOP,STOP,att;atc;act,uaa;uag;uga
+R,arginine,Arg,gca;gcg;gct;gcc;tct;tcc,cgu;cgc;cga;cgg;aga;agg
+H,histidine,His,gta;gtg,cau;cac
+Q,glutamine,Gln,gtt;gtc,caa;cag
+N,asparagine,Asn,tta;ttg,aau;aac
+K,lysine,Lys,ttt;ttc,aaa;aag
+G,glycine,Gly,cca;ccg;cct;ccc,ggu;ggc;gga;ggg
+D,aspartic acid,Asp,cta;ctg,gau;gac
+E,glutamic acid,Glu,ctt;ctc,gaa;gag

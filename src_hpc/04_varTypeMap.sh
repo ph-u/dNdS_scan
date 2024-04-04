@@ -29,5 +29,5 @@ printf " -- Done (`date`)\n"
 printf "Modifying child-script 'plot_c.sh' to ${bNam}_plot_c.sh (`date`)"
 sed -e "s/iDx/${bNam}_iDx/g" plot_c.sh > ${bNam}_plot_c.sh
 printf " -- Done (`date`)\n"
-sbatch ${bNam}_hpc_c.sh
+#sbatch ${bNam}_hpc_c.sh
 exit
