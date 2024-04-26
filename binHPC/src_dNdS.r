@@ -93,14 +93,14 @@ samNS = function(sAmple = "atgaaacgcggctactaaa", rEference = "atgaaacccgggttttaa
 	i2 = which(strsplit(tolower(sAmple),"")[[1]] != strsplit(tolower(rEference),"")[[1]]) # single nucleotide polymorphisms (SNP)
 	if(length(i2)>0){
 		i3 = c();for(i in 1:length(i2)){i3 = c(i3,max(i1[i1<=i2[i]]))};i3 = table(i3) # codon containing SNPs
-		x = c("codonPos","mutation","refCodon","mutCodon","reference","mutant")
+		x = c("codonPos","mutation","S2.codon","S1.codon","S2.res","S1.res")
 		x0 = as.data.frame(matrix(nr=length(i3), nc=length(x))) # record protein change
 		colnames(x0) = x
 		x = c(0,0); for(i in 1:length(i3)){ # N-dist (Nd), S-dist (Sd) calculation
 			x1 = c(substr(rEference,names(i3)[i],as.numeric(names(i3)[i])+2), substr(sAmple,names(i3)[i],as.numeric(names(i3)[i])+2))
 			x0[i,] = c(names(i3)[i],i3[i],x1, n2p(x1[1]), n2p(x1[2]))
 			x = x + codonMTpath(x1[1],x1[2])
-		};x0$type = ifelse(x0$reference==x0$mutant,"Synonymous",ifelse(x0$mutant==9,"Nonsense","Missense"))
+		};x0$type = ifelse(x0$S2.res==x0$S1.res,"Synonymous",ifelse(x0$S1.res==9,"Nonsense","Missense"))
 	}else{x = c(0,0); x0 = "Sequence identical"}
 	return(list(x,x0))}
 

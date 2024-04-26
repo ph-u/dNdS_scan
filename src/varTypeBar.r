@@ -35,7 +35,7 @@ invisible(dev.off())
 cat("Exported barplot:",date(),"\n")
 
 ##### List top 20 genes of each category #####
-for(i in 1:nrow(teS)){
-    cat("Top 20 genes",row.names(teS)[i],"to ref seq: ", paste(colnames(teS)[rev(order(teS[i,]))[1:20]], collapse = ", "), "\n")
-};rm(i)
+#for(i in 1:nrow(teS)){
+#    cat("Top 20 genes",row.names(teS)[i],"to ref seq: ", paste(colnames(teS)[rev(order(teS[i,]))[1:20]], collapse = ", "), "\n")
+#};rm(i)
 write.csv(t(teS), paste0(pT[2],"vt_Bar.csv"), row.names = T, quote = F)
