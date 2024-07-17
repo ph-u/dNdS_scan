@@ -28,10 +28,10 @@ for(i in 1:length(sRc)){
         r0$codon = r0.codon
         r0$aaRes = c(strsplit(nt2prot(paste0(f, collapse = "")), "")[[1]],"")
 
-##### Calculate running median #####
+##### Calculate running summary #####
         for(i0 in 1:nrow(r0)){
             r0.t = r1$dNdS[which(r1$ntStart<=r0$ntPos[i0] & r1$ntEnd>=r0$ntPos[i0])]
-            r0.t[!is.finite(r0.t)] = max(r0.t[is.finite(r0.t)])+1
+            r0.t[!is.finite(r0.t)] = max(r0.t[is.finite(r0.t)])+2
             r0[i0,-(1:3)] = summary(r0.t)
         }
 

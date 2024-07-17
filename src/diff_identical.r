@@ -39,6 +39,8 @@ cOlr0[which(row.names(r0)=="PA2185"),2] = "#ff00ffff"
 r0 = r0[,order(colnames(r0))]
 r0.0 = r0[cOlr0.0,]
 
+print(pairwise.wilcox.test(r0.L$perc[which(r0.L$gene %in% row.names(r0.0))], r0.L$src[which(r0.L$gene %in% row.names(r0.0))], p.adjust = "bonf"))
+
 pdf(paste0(pT[2],"idPerc_level.pdf"), width=6, height=7)
 par(mar = c(3,4,0,1)+.1)
 matplot(t(r0)*100, type="b", cex=.1, pch=18, lty = 1, col = cOlr0$cOl, xaxt = "n", ylab = "Clinical Isolates with identical sequence with PAO1 (%)")
