@@ -18,13 +18,13 @@ d0 = c("Cons", "Neut", "Vari", "No Data")
 d0 = data.frame(tYpe = d0, index = c(1:(length(d0)-1),NA), cOl = cBp[1:length(d0)], cex = c(4,12,14,.1))
 
 cat("Import:", date(), "\n")
-dNdS.med = read.csv(paste0(pT[1],"dNdS_median-PCA.csv"), header = T, row.names = 1)[,c(2,5,3,4)]
+dNdS.med = read.csv(paste0(pT[1],"dNdS_median-PCA.csv"), header = T, row.names = 1)[,c(2,4,3,5)]
 colnames(dNdS.med) = paste(1:ncol(dNdS.med),colnames(dNdS.med), sep = ".")
 d.plt = data.frame(sRc = rep(colnames(dNdS.med), each = nrow(dNdS.med)), dNdS = unname(unlist(dNdS.med)))
 
-tHs = median(dNdS.med[dNdS.med>1], na.rm=T) # .6
+tHs = median(dNdS.med[dNdS.med>1 & dNdS.med!= Inf], na.rm=T) # .6
 tHs = c(tHs, tHs^(-1))^(-1)
-#tHs = c(summary(dNdS.med[dNdS.med>0 & dNdS.med<=1], na.rm=T)[5], median(dNdS.med[dNdS.med>1], na.rm=T)) # medians between 0-1, 1-max
+#tHs = c(summary(dNdS.med[dNdS.med>0 & dNdS.med<=1], na.rm=T)[5], median(dNdS.med[dNdS.med>1 & dNdS.med!= Inf], na.rm=T)) # medians between 0-1, 1-max
 d.plt[,2] = ifelse(is.na(d.plt[,2]), d0$index[4], ifelse(is.infinite(d.plt[,2]), d0$index[3], ifelse(d.plt[,2] <= tHs[1], d0$index[1], ifelse(d.plt[,2] <= tHs[2], d0$index[2], d0$index[3]))))
 cat("Selection dN/dS thresholds:\n- conserved: <=",tHs[1],"\n- Neutral/Drift:",tHs[1],"< dN/dS <=", tHs[2], "\n- Variable: >",tHs[2], "\n")
 

@@ -8,7 +8,7 @@
 # date: 20240405 (mod from binHPC/reCon.r)
 
 argv = (commandArgs(T))
-#argv = "PA5221"
+#argv = "PA3151"
 pRe = "PAO1_107_"
 
 source("p_src.r"); library(ape)

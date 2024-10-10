@@ -26,7 +26,7 @@ if(!file.exists(d.nam) | file.info(d.nam)$size < 3124638){
     d.cat = vector(mode = "list", length = length(d.c))
     names(d.cat) = d.c
     for(i in 1:length(d.cat)){d.cat[[i]] = mEta$assemblyInfo.genbankAssmAccession[which(mEta$sOurce==names(d.cat)[i])]};rm(i)
-    d.Comp = list(c(d.cat[[2]],d.cat[[5]]), c(d.cat[[3]],d.cat[[4]])) # infectious vs non
+    d.Comp = list(c(d.cat[[2]],d.cat[[4]]), c(d.cat[[3]],d.cat[[5]])) # infectious vs non
 
     cat("Starting dNdS statistics data-collection:",date(),"\n")
     r0.c = c("gene", "cond1", "cond2", "log2FC", "p.val")

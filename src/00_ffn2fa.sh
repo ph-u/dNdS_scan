@@ -11,10 +11,12 @@
 
 i=$1
 if [[ `echo -e "${i}" | rev | cut -f 1 -d "." | rev` == "ffn" ]];then
-    nAm=`echo -e ${i} | sed -e "s/[.]ffn//"`
+    nAm=`sed -e "s/.ffn//" <<< ${i}`
 elif [[ `echo -e "${i}" | rev | cut -f 1 -d "." | rev` == "fna" ]];then
-    nAm=`echo -e ${i} | sed -e "s/[.]fna/_genomic/"`
+    nAm=`sed -e "s/.fna/_genomic/" <<< ${i}`
 fi
+echo -e ${nAm}
+[[ ${nAm} == "" ]]&&exit
 [[ -f ${nAm}_t.txt ]]&& rm ${nAm}_t.txt
 [[ -f ${nAm}_dup.txt ]]&&rm ${nAm}_dup.txt
 grep -n ">" ${i} | cut -f 1 -d ":" >> ${nAm}_t.txt

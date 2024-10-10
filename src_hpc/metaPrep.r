@@ -21,8 +21,9 @@ cHg = function(tErms, tArget, df = mEta){
 mEta$cOuntry = mEta$sOurce = NA
 for(i in 1:nrow(mEta)){mEta$cOuntry[i] = ifelse(is.na(mEta[i,grep("geo_loc", colnames(mEta))]),"Unknown",strsplit(mEta[i,grep("geo_loc", colnames(mEta))],":")[[1]][1])};rm(i)
 mEta = cHg(c("ystic ", "sputum"), "Cystic fibrosis")
-mEta = cHg(c("skin", "toe"), "Skin")
-mEta = cHg(c("iver", "water", "soil", "milk", "nvironm", "egg"), "Environmental")
+mEta = cHg(c("iver", "water", "Water", "soil", "nvironm", "milk", "egg"), "Environmental")
+mEta = cHg(c("skin", "groin", "toe", "sink", "Pool", "Hospital", "Home"), "Urban")
+mEta = cHg(c("urine", "wound", "ulcer", "lesion", "non cystic", "pneumonia", "bronchiectasis"), "Other infections")
 mEta$sOurce[which(is.na(mEta[,grep("isolation_", colnames(mEta))]))] = "Unknown"
 mEta$sOurce[is.na(mEta$sOurce)] = "Other infections"
 

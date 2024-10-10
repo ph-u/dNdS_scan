@@ -17,5 +17,5 @@
 
 ### Pipeline (in SLURM-mediated high performance computer)
 
-v1.0 `dNdSGenome/` (doi:)  
 v2.0 `binHPC/` (doi:)
+v1.0 `dNdSGenome/` (doi:)  

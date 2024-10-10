@@ -1,26 +1,43 @@
 #!/bin/env python3
 # author: ph-u
-# script: PA2185_recolour.py
-# desc: recolour PA2185 peptide structure
-# in: "run /[full_path]/PA2185_recolour.py" -> "loadBfacts [protein_file_basename]"
+# script: PyMol_recolor.py
+# desc: recolour a peptide structure
+# in: "run /[full_path]/PyMol_recolor.py" -> "loadBfacts [protein_file_basename]"
 # out: NA
 # arg: 0
 # date: 20240212, 20240320
 
 ##### PyMol command sequence #####
-# load [full/path]/AF-Q9I1T0-F1-model_v4.cif
-# run [full/path]/PA2185_recolour.py
-# loadBfacts AF-Q9I1T0-F1-model_v4
+### monomer ###
+# 1. load /[full/path]/AF-Q9HZR3-F1-model_v4.cif
+# 2. run [full/path]/PyMol_recolor.py
+# 3. loadBfacts AF-Q9HZR3-F1-model_v4
+## {repeat steps 1-3}
+# 4. set_name AF-Q9HZR3-F1-model_v4, PA2934.{ce}
+
+### polymer ###
+# 1. load /[full/path]/3kd2.cif
+# 2. set_name 3kd2, 3kd2.{ce}
+## {repeat steps 1-2}
+# 3. super 3kd2.c, 3kd2.e
+# 4. run [full/path]/PyMol_recolor.py
+# 5. select m, (resi 25-317 and chain {ABCD} and 3kd2.{ce})
+# 6. extract m{ABCD}.{ce}, m
+# 7. loadBfacts m{ABCD}.{ce}
+## {repeat steps 5-7 for 8 times, each 4 times run once step 4 with a modified srcNam number: each polymer has 4 subunits, 2 polymers in total}
+
+### other useful commands ###
 # bg_color white
-# set_name dNdS, dNdS.{CF,env,oth,skin,unk}
+# set grid_mode,1
+# delete 3kd2
 ##################################
 
 ##### Get colour reference file #####
 import pandas, math
-pT0, pT1 = "/[full_path]/PAO1_107_PA2185_", "--reCon.csv"
-scaleMax, srcNam = 1.3, ["Cystic-fibrosis","Environmental","Other-infections","Skin","Unknown"]
+pT0, pT1 = "/[full_path]/[dNdS_prefix]_", "--reCon.csv"
+scaleMax, srcNam = [0.,1.2], ["Cystic-fibrosis","Environmental"]
 
-d = pandas.read_csv(pT0 + srcNam[0] + pT1)
+d = pandas.read_csv(pT0 + srcNam[0] + pT1) # !!!!! CHANGE THE BRACKETED NUMBER HERE !!!!!
 
 ##### Reset residues colour #####
 from pymol import cmd, stored, math
@@ -28,16 +45,16 @@ from pymol import cmd, stored, math
 sPec, cOlumn = "rainbow", ["dNdS.mean","dNdS"]
 def loadBfacts (mol, startaa=1, source=d, visual="Y"):
     """usage: loadBfacts mol, [startaa, [source, [visual]]]"""
-    source.at[len(source)-1,"dNdS.mean"] = scaleMax
+    source.at[startaa-1,cOlumn[0]] = scaleMax[0]
+    source.at[len(source)-1,cOlumn[0]] = scaleMax[1]
     obj = cmd.get_object_list(mol)[0]
     cmd.alter(mol,"b=-1.0")
     counter = int(startaa)
+    xMin = min(source[cOlumn[0]])
     if math.isinf(min(source[cOlumn[0]])):
-        xMin = 0
         xMax = max(source[cOlumn[0]])+2
     else:
-        xMin = 0 #min(source[cOlumn[0]])
-        xMax = scaleMax #max(source[cOlumn[0]])
+        xMax = max(source[cOlumn[0]])
 
     for x in range(len(source)):
         if math.isinf(source[cOlumn[0]][x]):
