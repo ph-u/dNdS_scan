@@ -12,7 +12,7 @@ argv = (commandArgs(T))
 cat(argv,":",date(),"\n")
 
 source("src_dNdS.r"); library(ape); library(Biostrings)
-pT = paste0("../",c("data","binHPC"),"/")
+pT = paste0("../",c("data","binHPC2"),"/")
 aRg = list.files(pT[1],argv)
 argv = aRg[grep("_db.fa",aRg)]
 
