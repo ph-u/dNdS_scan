@@ -21,7 +21,7 @@ for i4 in `seq 1 ${dbNum}`;do
     i1=`head -n ${i4} iDx.txt | tail -n 1`
     echo -e "`date` - ${i1}: ${i4} / ${dbNum}"
 ## blast
-    ./blastn -query ../data/${i2}.fa -db `echo -e "${i1}" | rev | cut -f 1 -d "/" | rev` -out ../data/${i5}_${i3}.txt -outfmt "6 delim=@ qseqid sseqid sstart send sstrand sseq"
+    ./blastn -query ../data/${i2}.fa -db `echo -e "${i1}" | rev | cut -f 1 -d "/" | rev` -out ../data/${i5}_${i3}.txt -outfmt "6 delim=@ qseqid sseqid sstart send sstrand sseq" -max_target_seqs 1000 -subject_besthit
     Rscript blastn2faByGene.r ../data/${i5}_${i3}.txt iDx.txt
 done
 exit
