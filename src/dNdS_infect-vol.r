@@ -71,6 +71,7 @@ if(!file.exists(d.nam) | file.info(d.nam)$size < 3124638){
 
 ##### Volcano plots #####
 d.vol = read.csv(d.nam, header = T)
+d.vol = d.vol[which(d.vol$gene %in% GTF$Locus.Tag[GTF$Feature.Type=="CDS"]),]
 d.vol$cOnd = paste0(d.vol$cond1,d.vol$cond2)
 d.vol.c = unique(d.vol$cOnd)
 
@@ -91,15 +92,15 @@ for(i in 1:length(d.vol.c)){
                 pCutoffCol = "p.adj", # EnhancedVolcano suggestion: false-discovery rate
                 FCcutoff = 1,
                 pointSize = 2,
-                labSize = 4,
+                labSize = 0,
                 col = c('grey30', 'forestgreen', 'royalblue', 'red2'),
                 legendLabels = c('NS', expression(Log[2] ~ LMRC), 'Adjusted p-value', expression(adjusted ~ p - value ~ and ~ log[2] ~ LMRC)),
                 legendPosition = 'bottom',
                 legendLabSize = 12,
                 legendIconSize = 4,
-                drawConnectors = T,
+                drawConnectors = F,
 #                max.overlaps = Inf,
-                widthConnectors = .5))
+                widthConnectors = 0))
     invisible(dev.off())
 };rm(i, d.t)
 cat("\nDone plotting Volcanos:",date(),"\n")

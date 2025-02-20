@@ -46,14 +46,18 @@ for(i in 1:length(f.r0)){f.r0[[i]][is.na(f.r0[[i]])] = 0};rm(i)
 save(f.r0, file=paste0(pT[1],"varTypeBar_circle.rda"))
 
 cat("\nPlotting:",date(),"\n")
+xLab = Mbp$loc[match(row.names(f.r0[[1]]),Mbp$locusTag)]
+xLab[is.na(xLab)] = ""
 # https://stackoverflow.com/questions/65137163/geom-bar-removed-rows-containing-missing-values-but-doesnt
 # https://www.tidyverse.org/blog/2024/03/ggplot2-3-5-0-coord-radial/
 for(i in 1:length(fTag)){
     pCir = ggplot() +
         geom_col(aes(x = as.factor(rep(row.names(f.r0[[i]]), ncol(f.r0[[i]]))), y = unname(unlist(f.r0[[i]])), fill = rep(colnames(f.r0[[i]]), each = nrow(f.r0[[i]]))), alpha=1) +
         scale_fill_manual(values = set_names(cBp[1:ncol(f.r0[[1]])], colnames(f.r0[[1]])), name = "Type") +
-        ggtitle(f.title[i]) + xlab("Gene PA number on PAO1") + ylab("Proportion of the Type of Sequence Variation (%)") + scale_x_discrete(label = ifelse(((1:nrow(f.r0[[i]]))%%477)==1, row.names(f.r0[[i]]), "")) +
-        theme(axis.text = element_blank(),
+        ggtitle(f.title[i]) + xlab("") + ylab("") + #xlab("Gene PA number on PAO1") + ylab("Proportion of the Type of Sequence Variation (%)") +
+#        scale_x_discrete(label = ifelse(((1:nrow(f.r0[[i]]))%%477)==1, row.names(f.r0[[i]]), "")) +
+        scale_x_discrete(label = xLab) +
+        theme(axis.text = element_text(size = 24),
             axis.title = element_blank(),
             panel.grid = element_blank(),
             plot.margin = unit(rep(-1,4), "cm")) +
@@ -61,6 +65,23 @@ for(i in 1:length(fTag)){
     ggsave(paste0(pT[2],"vt_Bar_c_",gsub(" ","-",fTag[i]),".pdf"), plot = pCir, width = 7, height = 7)
     cat("Exported barplot",fTag[i],":",date(),"\n")
 };rm(i)
+rm(xLab)
+
+##### Contrast type of variation between CF and env #####
+#cat("Contrast varType: CF vs env -- ",date(),"\n")
+
+#vtContrast = f.r0[[1]]/f.r0[[2]]
+#vtContrast[is.na(vtContrast)] = 1
+#for(i in 1:ncol(vtContrast)){vtContrast[is.infinite(vtContrast[,i]),i] = max(unlist(vtContrast)[is.finite(unlist(vtContrast))])};rm(i)
+
+#jpeg(paste0(pT[2],"vt_Bar_noHit.jpeg"), width = 2400, height = 1200, res = 300)
+#par(mar = c(2,0,0,0)+.1)
+#plot(x = 1:nrow(vtContrast), y = log10(vtContrast[,5]), type = "p", pch = 3, xaxt = "n", yaxt = "n", ylab = "", xlab = "", cex = .2)
+#axis(1, at = as.numeric(sub("PA","",Mbp$locusTag)), labels = Mbp$loc)
+#abline(v = c(2125,2384), col = "#ff00ffff")
+#invisible(dev.off())
+
+#cat("Contrast done -- ",date(),"\n")
 
 #pdf(paste0(pT[2],"vt_Bar_circle.pdf"))
 #grid.arrange(pCir[[1]],pCir[[2]],pCir[[3]],pCir[[4]],pCir[[5]], ncol = 1)

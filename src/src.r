@@ -47,3 +47,24 @@ pcaLAB = function(pCa,nUm){
     x0 = strsplit(gsub("%","(",pCa$labels$y),"[(]")[[1]]
     pCa$labels$y = paste0(x0[1],"(",nUm[2],"%",x0[3])
     return(pCa)}
+
+##### CDS metadata #####
+GTF = read.table(paste0(pT[4],"features.txt"), sep = "\t", header = T, quote = "", comment.char = "")
+GTF = cbind(GTF[,-ncol(GTF)], read.table(text = sub("[.][.]","@",sub("[(]","@",GTF$Coordinates)),sep = "@")[,-3])
+colnames(GTF)[(ncol(GTF)-1):ncol(GTF)] = c("start","end")
+GTF$gNam = ifelse(GTF$Gene.Name=="",GTF$Locus.Tag,GTF$Gene.Name)
+
+##### Mbp positions #####
+m0 = floor(log10(max(GTF$end)))
+Mbp = data.frame(locusTag=NA, loc=paste(1:m0,"Mbp"))
+for(i in 1:m0){
+    i0 = which(GTF$start>(i*10^m0))[1]
+    i1 = abs(c(GTF$start[i0],GTF$end[i0-1])-i*10^m0)
+    Mbp$locusTag[i] = ifelse(which(i1==min(i1))==1,GTF$NCBI.Locus.Tag[i0],GTF$NCBI.Locus.Tag[i0-1])
+};rm(i,m0)
+
+##### operon map #####
+opMap = read.table(paste0(pT[4],"opMap--raw.gff3"), sep = "\t", quote = "")[-1,-c(6,8)]
+colnames(opMap) = c("loc","src","type","start","end","strand","details")
+opMap$nAm = read.table(text = sub(";","@",read.table(text = sub(";Name=","@",gsub("\'","",opMap$details)), sep = "@")[,2]), sep = "@")[,1]
+opMap = opMap[grep("PA2125", opMap$nAm):grep("PA2384", opMap$nAm),]

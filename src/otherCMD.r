@@ -27,9 +27,14 @@ row.names(r2) = unique(r1$gEne)
 for(i in 1:nrow(r1)){ r2[which(row.names(r2) == r1$gEne[i]),which(colnames(r2) == r1$sRc[i])] = r1$noHit[i] };rm(i)
 r2 = round(r2,1)
 r2 = r2[which(!is.na(rowSums(r2[,1:2]))),1:2]
+r2$gNam = GTF$gNam[match(row.names(r2), GTF$Locus.Tag)]
+r2$feature = GTF$Feature.Type[match(row.names(r2), GTF$Locus.Tag)]
+r2$operon = NA
+for(i in 1:nrow(r2)){if(length(grep(row.names(r2)[i],GTF$nAm))>0){r2$operon[i] = opMap$nAm[grep(r2$gNam[i],GTF$nAm)]}};rm(i)
 #r2[is.na(r2)] = paste0("< ",tHs)
 cat("There were",nrow(r2),"genes\n")
 print(r2)
+paste0(row.names(r2), collapse = ",")
 
 cat("\nDetails on the extensive indel fraction in the PAO1 genome:\n")
 r0$INDEL.sel = r0$INDEL.identical + r0$INDEL.SNP
@@ -44,7 +49,8 @@ cat("There were",nrow(r3),"genes\n")
 print(r3)
 
 ##### Lost-gene island #####
-print(wilcox.test(f.r0[[1]][which(f.r0[[1]]$gEne=="PA2125"):which(f.r0[[1]]$gEne=="PA2384"),"noHit"], f.r0[[2]][which(f.r0[[2]]$gEne=="PA2125"):which(f.r0[[2]]$gEne=="PA2384"),"noHit"]))
+print(wilcox.test(f.r0[[1]][which(f.r0[[1]]$gEne=="PA2125"):which(f.r0[[1]]$gEne=="PA2384"),"noHit"], f.r0[[1]][,"noHit"])) # island vs whole genome
+print(wilcox.test(f.r0[[1]][which(f.r0[[1]]$gEne=="PA2125"):which(f.r0[[1]]$gEne=="PA2384"),"noHit"], f.r0[[2]][which(f.r0[[2]]$gEne=="PA2125"):which(f.r0[[2]]$gEne=="PA2384"),"noHit"])) # CF vs env
 
 ##### Neutral-selected genes #####
 cat("\nDetails on neutral-selection along the PAO1 genome, CF vs Environment only:\n")

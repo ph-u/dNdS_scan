@@ -46,7 +46,7 @@ cat("Genome matching starts:",date(),"\n")
 
 ## Add in noHit genomes if any
   x0 = unique(envNode$fNam[br0$genome])
-  if(length(x0)==length(envG)){if(sub(".fna$","",envG)[order(envG)]==x0[order(x0)]){e0=1}else{e0=0}}else{e0=0} # e0==0 if there are noHits
+  if(length(x0)==length(envG)){if(all(sub(".fna$","",envG)[order(envG)]==x0[order(x0)])){e0=1}else{e0=0}}else{e0=0} # e0==0 if there are noHits
   if(e0==0){
     x0 = paste0(unique(envNode$fNam[!(envNode$fNam %in% x0)]),";noHit")
     x0 = setNames(as.list(rep("N",length(x0))),x0)
