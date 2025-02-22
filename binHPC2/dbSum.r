@@ -11,7 +11,7 @@ argv = (commandArgs(T))
 #argv = "1_GCA_000022165_STM14_0013"
 cat(argv,":",date(),"\n")
 
-source("src_dNdS.r"); library(ape); library(Biostrings); library(pwalign)
+source("src_dNdS.r"); library(ape); library(Biostrings)
 pT = paste0("../",c("data","binHPC2"),"/")
 aRg = list.files(pT[1],argv)
 argv = aRg[grep("_db.fa",aRg)]

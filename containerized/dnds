@@ -1,0 +1,13 @@
+#!/bin/bash
+# author: ph-u
+# script: dnds
+# desc: overall pipeline for ORF identification & dN/dS calculation
+# in: dnds [line number for a gene] [reference accession number]
+# out: NA
+# arg: 2
+# date: 20250222
+
+head -n 26 blastn_c.sh | tail -n 12 | sed -e "s/iDx/$2_iDx" > dnds.sh
+tail -n +11 dbSum_c.sh | sed -e "s/iDx/$2_iDx" >> dnds.sh
+bash dnds.sh $1
+exit
