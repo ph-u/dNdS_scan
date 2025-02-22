@@ -7,7 +7,7 @@ RUN Rscript -e "install.packages('https://CRAN.R-project.org/package=ape&version
 ##### pipeline settings #####
 RUN mv /dNdS_scan-master/src/00_ffn2fa.sh /dNdS_scan-master/binHPC2/
 RUN mv /dNdS_scan-master/binHPC2 /
-RUN mv /dNdS_scan-master/contanerized/* /binHPC2/
+RUN mv /dNdS_scan-master/containerized/* /binHPC2/
 RUN for i in `ls /binHPC2/*`;do chmod 755 ${i};done
 
 ##### Set env #####
