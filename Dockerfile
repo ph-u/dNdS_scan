@@ -25,5 +25,3 @@ RUN for i in `ls /binHPC2/*`;do chmod 755 ${i};done
 ENV PATH="/binHPC2:${PATH}"
 WORKDIR /binHPC2
 CMD ["cp", "/binHPC2/masterTemplate.sh", "/data/"]
-# docker rmi -f $(docker images -aq)
-# zip -r master.zip {binHPC2,containerized,src} && docker image build --build-arg CACHEBUST=$(date +%s) -t phudock/dnds . && docker run -it phudock/dnds bash
