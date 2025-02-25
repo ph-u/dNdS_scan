@@ -1,4 +1,5 @@
 FROM rocker/r-base:4.3.1
+LABEL org.opencontainers.image.source="https://github.com/ph-u/dNdS_scan"
 RUN apt-get update && apt-get -y install wget ncbi-blast+
 RUN mkdir -p data && mkdir -p res
 RUN Rscript -e "install.packages('ape', dependencies = T);install.packages('BiocManager', dependencies = T);BiocManager::install('Biostrings', version='3.18')"
