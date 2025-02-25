@@ -1,0 +1,28 @@
+#!/bin/env Rscript
+# author: ph-u
+# script: dbChunks
+# desc: get accession number chunks for blast make databases
+# in: Rscript dbChunks [overall accession list]
+# out: data/*_[overall accession list].txt
+# arg: 1
+# date: 20250223
+
+argv = (commandArgs(T))
+pT = "../home/" # singularity directory bind
+mtLen = 750
+d0 = read.table(argv[1], sep = "\t", header = T, quote = "")
+
+##### Get GCF/GCA column #####
+d1 = c(grep("GCF",d0),grep("GCA",d0))
+d1 = unique(d1[d1>0])
+if(length(c(grep("GCF",colnames(d0)[d1]),grep("GCA",colnames(d0)[d1])))>0){
+    d0 = read.table(argv[1], sep = "\t", header = F, quote = "")}
+
+##### Segregate accession number into 750 chunks #####
+d1 = matrix(c(d0[,d1],rep(NA,mtLen-nrow(d0)%%mtLen)), nr = mtLen)
+
+nAm0 = strsplit(basename(argv[1]),"")[[1]]
+nAm1 = which(nAm0 == ".")
+for(i in 1:ncol(d1)){
+    write.table(d1[!is.na(d1[,i]),i], paste0(pT,i,"_",substr(basename(argv[1]),1,nAm1[length(nAm1)]-1),".txt"), col.names = F, quote = F, row.names = F)
+};rm(i)

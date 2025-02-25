@@ -1,0 +1,22 @@
+#!/bin/bash
+# author: ph-u
+# script: db
+# desc: prepare blastdb in chunks of 750 genomes
+# in: bash db *_[overall accession list]
+# out: data/*_[overall accession list].nb*
+# arg: 1
+# date: 20250224
+
+bNam=`basename $1 | rev | sed -e "s/[.]/@/" | cut -f 2 -d "@" | rev`
+[[ -f ${bNam}.fa ]]&&rm ${bNam}.fa
+touch ${bNam}.fa
+
+while read -r L;do
+    datasets download genome accession ${L} --include genome && unzip ncbi_dataset.zip && rm {README.md,md5sum.txt,ncbi_dataset.zip}
+    cat `find ncbi_dataset/ | grep -e "_genomic.fna$"` >> ${bNam}.fa
+    rm -r ncbi_dataset/
+done < $1
+
+makeblastdb -in ${bNam}.fa -dbtype nucl -parse_seqids -out ../home/${bNam} -title ${bNam} # singularity binding home directory
+rm ${bNam}.fa
+exit

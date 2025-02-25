@@ -1,0 +1,26 @@
+#!/bin/bash
+# author: ph-u
+# script: ref
+# desc: download and reformat reference genomes
+# in: ref [../path/2/refGenome].txt
+# out: [acc1]_{cds,flanking,genome}.*
+# arg: 1
+# date: 20250223
+
+datasets download genome accession `cat $1` --include cds,gff3,genome && unzip ncbi_dataset.zip && rm ncbi_dataset.zip
+[[ -f README.md ]]&&rm README.md
+[[ -f md5sum.txt ]]&&rm md5sum.txt
+
+pT="binHPC2" # binHPC2 src
+while read -r L;do
+    L0=`echo -e "${L}" | sed -e "s/[.]//g" -e "s/_//g"`
+    cp ncbi_dataset/data/${L}/genomic.gff ../data/${L0}_genomic.gff
+    bash ../${pT}/00_ffn2fa.sh ncbi_dataset/data/${L}/cds_from_genomic.fna ../data/${L0}_cds
+    bash ../${pT}/00_ffn2fa.sh `ls ncbi_dataset/data/${L}/${L}*` ../data/${L0}_genomic
+    bash gFlanking.sh ../data/${L0}_cds.fa ../data/${L0}_genomic.fa
+    cat ../data/${L0}_cds-flanking.csv | cut -f 2 -d "," > ../data/${L0}_iDx.csv
+done < $1
+
+rm -r ncbi_dataset
+cp ../data/* ../home/ # singularity dir bind
+exit

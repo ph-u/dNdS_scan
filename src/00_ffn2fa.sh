@@ -2,21 +2,16 @@
 # author: ph-u
 # script: 00_ffn2fa.sh
 # desc: convert multiline ffn protein-coding annotated genes to FASTA format
-# in: bash 00_ffn2fa.sh [../relative/path/2/basename.ffn]
-# out: raw/[basename].fa
+# in: bash 00_ffn2fa.sh [../relative/path/2/basename.ffn] [newName]
+# out: [../relative/path/2]/newName.fa
 # arg: 1
-# date: 20231220
+# date: 20231220,20250223
 
-[[ -z $1 ]]&&head -n 5 $0 | tail -n 1&&exit
+[[ -z $2 ]]&&head -n 5 $0 | tail -n 1&&exit
 
-i=$1
-if [[ `echo -e "${i}" | rev | cut -f 1 -d "." | rev` == "ffn" ]];then
-    nAm=`sed -e "s/.ffn//" <<< ${i}`
-elif [[ `echo -e "${i}" | rev | cut -f 1 -d "." | rev` == "fna" ]];then
-    nAm=`sed -e "s/.fna/_genomic/" <<< ${i}`
-fi
+i=$1;nAm=$2
+
 echo -e ${nAm}
-[[ ${nAm} == "" ]]&&exit
 [[ -f ${nAm}_t.txt ]]&& rm ${nAm}_t.txt
 [[ -f ${nAm}_dup.txt ]]&&rm ${nAm}_dup.txt
 grep -n ">" ${i} | cut -f 1 -d ":" >> ${nAm}_t.txt
