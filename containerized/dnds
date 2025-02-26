@@ -7,11 +7,9 @@
 # arg: 2
 # date: 20250222
 
-head -n 26 blastn_c.sh | tail -n 12 | sed -e "s/iDx/$2_iDx" > dnds.sh
-tail -n +11 dbSum_c.sh | sed -e "s/iDx/$2_iDx" >> dnds.sh
+refAcc=`echo -e "$2" | sed -e "s/[.]//g" -e "s/_//g"`
+head -n 26 blastn_c.sh | tail -n 12 | sed -e "s/iDx/${refAcc}_iDx" > dnds.sh
+tail -n +11 dbSum_c.sh | sed -e "s/iDx/${refAcc}_iDx" >> dnds.sh
 
-#cp ../home/*_*.n* .
-#cp ../home/* ../data/
 bash dnds.sh $1
-#cp ../data/*.{fa,csv} ../home/ # singularity directory bind
 exit
