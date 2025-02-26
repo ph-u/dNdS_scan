@@ -17,6 +17,6 @@ while read -r L;do
     rm -r ncbi_dataset/
 done < $1
 
-makeblastdb -in ${bNam}.fa -dbtype nucl -parse_seqids -out ../home/${bNam} -title ${bNam} # singularity binding home directory
+makeblastdb -in ${bNam}.fa -dbtype nucl -parse_seqids -out ../data/${bNam} -title ${bNam} # singularity binding home directory
 rm ${bNam}.fa
 exit

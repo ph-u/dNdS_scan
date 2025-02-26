@@ -10,8 +10,8 @@
 head -n 26 blastn_c.sh | tail -n 12 | sed -e "s/iDx/$2_iDx" > dnds.sh
 tail -n +11 dbSum_c.sh | sed -e "s/iDx/$2_iDx" >> dnds.sh
 
-cp ../home/*_*.n* .
-cp ../home/* ../data/
+#cp ../home/*_*.n* .
+#cp ../home/* ../data/
 bash dnds.sh $1
-cp ../data/*.{fa,csv} ../home/ # singularity directory bind
+#cp ../data/*.{fa,csv} ../home/ # singularity directory bind
 exit

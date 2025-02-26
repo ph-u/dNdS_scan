@@ -8,7 +8,7 @@
 # date: 20250223
 
 argv = (commandArgs(T))
-pT = "../home/" # singularity directory bind
+pT = "../data/" # singularity directory bind
 mtLen = 750
 d0 = read.table(argv[1], sep = "\t", header = T, quote = "")
 
