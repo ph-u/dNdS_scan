@@ -24,4 +24,4 @@ RUN for i in `ls /binHPC2/*`;do chmod 755 ${i};done
 #RUN rm -r /dNdS_scan-master
 ENV PATH="/binHPC2:${PATH}"
 WORKDIR /binHPC2
-CMD ["cp", "/binHPC2/masterTemplate.sh", "/data/"]
+CMD ["cp", "/binHPC2/masterTemplate.sh", "/data/", ";", "cp", "/binHPC2/dnds_runHead.sh", "/data/"]
