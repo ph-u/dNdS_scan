@@ -22,6 +22,6 @@ for i in `ls ../data/*_ecoli_blastdbACC.txt`;do
 done
 
 ##### Stage 2: Run dN/dS calculations #####
-apptainer run --bind ${PWD}:/data dnds_scan_latest.sif dnds [line number of ORF in iDx.csv file] [refAccessionNumber]
+apptainer run --bind ${PWD}:/data dnds_scan_latest.sif dnds 1 #[line number of ORF in iDx.csv file]
 
 exit
