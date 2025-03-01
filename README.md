@@ -1,23 +1,41 @@
-# dNdS gene-by-gene comparative genomics pipeline
+# NCBI Datasets
 
-## Computational requirements
+https://www.ncbi.nlm.nih.gov/datasets
 
-1. Install `blastn` program from NCBI, program within `dNdSGenome/` directory ([NCBI blast](https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html))
-0. Use Genbank annotated database (GCA_*), can be downloaded via the NCBI `datasets` toolbox ([NCBI datasets](https://www.ncbi.nlm.nih.gov/datasets/docs/v2/download-and-install/))
-0. (<=v2.0) Construct NCBI databases, one genome one database, all files (including the raw genomic file (with extension `.fna`) store within `dNdSGenome/` directory (use the `makeblastdb` tool within the "NCBI blast" toolbox)
-0. (>=v3.0) Construct one NCBI database with all draft genomes and retain all raw unannotated genomes within the directory tree as the `binHPC2/` directory
+This zip archive contains an NCBI Datasets Data Package.
 
-## Steps
+NCBI Datasets Data Packages can include sequence, annotation and other data files, and metadata in one or more data report files.
+Data report files are in JSON Lines format.
 
-### Preprocessing
+---
+## FAQs
+### Where is the data I requested?
 
-1. `bash 00_ffn2fa.sh [../relative/path/2/reference_cds_genome.ffn]`: require a `raw/` directory at the same level as the `src/` directory
-0. `bash 01_genomeFlanking.sh [../relative/2/reference_cds_genome.fa] [../path/2/reference_genomic.fa] [(optional) flanking region length]`: Both `.fa` fasta files should be pre-processed in the above step, converting multiple-lined sequences to single-lined sequences
-0. `bash 00_mkdbBLASTN.sh [../relative/path/2/sourceFasta] [../relative/path/2/dbDirectory]`
-0. (<=v2.0) move all generated files fropm the last step, also their respective source fasta files (should be with extension `.fna`), to the `dNdSGenome/` (v1.0) or `binHPC/` (v2.0) directory
+Your data is in the subdirectory `ncbi_dataset/data/` contained within this zip archive.
 
-### Pipeline (in SLURM-mediated high performance computer)
+### I still can't find my data, can you help?
 
-v3.0 `binHPC2/` (doi:)  
-v2.0 `binHPC/` (doi:)  
-v1.0 `dNdSGenome/` (doi:)  
+We have identified a bug affecting Mac Safari users. When downloading data from the NCBI Datasets web interface, you may see only this README file after the download has completed (while other files appear to be missing).
+As a workaround to prevent this issue from recurring, we recommend disabling automatic zip archive extraction in Safari until Apple releases a bug fix.
+For more information, visit:
+https://www.ncbi.nlm.nih.gov/datasets/docs/reference-docs/mac-zip-bug/
+
+### How do I work with JSON Lines data reports?
+
+Visit our JSON Lines data report documentation page:
+https://www.ncbi.nlm.nih.gov/datasets/docs/v2/tutorials/working-with-jsonl-data-reports/
+
+### What is NCBI Datasets?
+
+NCBI Datasets is a resource that lets you easily gather data from across NCBI databases. Find and download gene, transcript, protein and genome sequences, annotation and metadata.
+
+### Where can I find NCBI Datasets documentation?
+
+Visit the NCBI Datasets documentation pages:
+https://www.ncbi.nlm.nih.gov/datasets/docs/
+
+---
+
+National Center for Biotechnology Information
+National Library of Medicine
+info@ncbi.nlm.nih.gov
