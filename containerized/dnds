@@ -9,9 +9,9 @@
 
 tID=$1
 
-i2=`head -n ${tID} ../data/iDx.csv | tail -n 1 | cut -f 1 -d ","` # Acc_locus
+i2=`head -n ${tID} iDx.csv | tail -n 1 | cut -f 1 -d ","` # Acc_locus
 aCc=`echo -e "${i2}" | cut -f 1 -d "_"` # accession number
-lOc=`echo -e "${i2}" | cut -f 2 -d "_"` # locus tag
+lOc=`echo -e "${i2}" | sed -e "s/_/@/" | cut -f 2 -d "@"` # locus tag
 dbNum=`wc -l < ../data/iDx.txt`
 
 ##### query sequence from reference genome #####

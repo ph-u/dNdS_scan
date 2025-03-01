@@ -26,6 +26,6 @@ while read -r L;do
     rm ../data/${L0}_iDx.csv
 done < $1
 
-cat ../data/iDx.csv | cut -f 1 -d "_" | sort | uniq -c > ../data/freqSLURM.txt
+cat iDx.csv | cut -f 1 -d "_" | sort | uniq -c > ../data/freqSLURM.txt
 rm -r ncbi_ref
 exit

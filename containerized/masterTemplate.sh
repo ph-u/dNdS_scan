@@ -14,9 +14,12 @@
 mkdir ../data && apptainer pull docker://ghcr.io/ph-u/dnds_scan:latest
 
 ##### Stage 1: Reference genome & blastn database preparation #####
-apptainer run --bind ${PWD}:/data dnds_scan_latest.sif dbChunks [../relative/path/2/total_blastdb_accession_list].txt
-apptainer run --bind ${PWD}:/data dnds_scan_latest.sif ref [../relative/path/2/refGenomes_list].txt
-apptainer run --bind ${PWD}:/data dnds_scan_latest.sif db [../relative/path/2/blastdb_accession_list].txt
+apptainer run --bind ${PWD}:/data dnds_scan_latest.sif ref ../src_log/ecoli_refGenome.txt & # [../relative/path/2/refGenomes_list].txt
+
+apptainer run --bind ${PWD}:/data dnds_scan_latest.sif dbChunks ../src_log/ecoli_blastdbACC.txt # [../relative/path/2/total_blastdb_accession_list].txt
+for i in `ls ../data/*_ecoli_blastdbACC.txt`;do
+    apptainer run --bind ${PWD}:/data dnds_scan_latest.sif db ../data/5_ecoli_blastdbACC.txt & #[../relative/path/2/blastdb_accession_list].txt
+done
 
 ##### Stage 2: Run dN/dS calculations #####
 apptainer run --bind ${PWD}:/data dnds_scan_latest.sif dnds [line number of ORF in iDx.csv file] [refAccessionNumber]
