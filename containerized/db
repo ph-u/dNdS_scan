@@ -13,10 +13,10 @@ touch ${bNam}.fa
 mkdir -p ../data/${bNam}
 
 while read -r L;do
-    datasets download genome accession ${L} --include genome && unzip ncbi_dataset.zip && rm {README.md,md5sum.txt,ncbi_dataset.zip}
-    cat `find ncbi_dataset/ | grep -e "_genomic.fna$"` >> ${bNam}.fa
-    mv `find ncbi_dataset/ | grep -e "_genomic.fna$"` ../data/${bNam}/
-    rm -r ncbi_dataset/
+    datasets download genome accession ${L} --include genome --filename ${L}.zip && unzip ${L}.zip -d ../data/${bNam} && rm {../data/${bNam}/README.md,../data/${bNam}md5sum.txt,${L}.zip} && mv ../data/${bNam}/ncbi_dataset ncbi_${L}
+    cat `find ncbi_${L}/ | grep -e "_genomic.fna$"` >> ${bNam}.fa
+    mv `find ncbi_${L}/ | grep -e "_genomic.fna$"` ../data/${bNam}/
+    rm -r ncbi_${L}/
 done < $1
 
 makeblastdb -in ${bNam}.fa -dbtype nucl -parse_seqids -out ../data/${bNam} -title ${bNam} # singularity binding home directory
