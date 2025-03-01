@@ -13,7 +13,7 @@ touch ${bNam}.fa
 mkdir -p ../data/${bNam}
 
 while read -r L;do
-    datasets download genome accession ${L} --include genome --filename ${L}.zip && unzip ${L}.zip -d ../data/${bNam} && rm {../data/${bNam}/README.md,../data/${bNam}md5sum.txt,${L}.zip} && mv ../data/${bNam}/ncbi_dataset ncbi_${L}
+    datasets download genome accession ${L} --include genome --filename ${L}.zip && unzip ${L}.zip -d ../data/${bNam} && rm {../data/${bNam}/README.md,../data/${bNam}/md5sum.txt,${L}.zip} && mv ../data/${bNam}/ncbi_dataset ncbi_${L}
     cat `find ncbi_${L}/ | grep -e "_genomic.fna$"` >> ${bNam}.fa
     mv `find ncbi_${L}/ | grep -e "_genomic.fna$"` ../data/${bNam}/
     rm -r ncbi_${L}/
