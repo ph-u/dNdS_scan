@@ -23,8 +23,9 @@ while read -r L;do
     while read -r L1;do
         echo -e "${L0}_${L1}" >> iDx.csv
     done < ../data/${L0}_iDx.csv
+    rm ../data/${L0}_iDx.csv
 done < $1
 
-rm ../data/${L0}_iDx.csv
+cat ../data/iDx.csv | cut -f 1 -d "_" | sort | uniq -c > ../data/freqSLURM.txt
 rm -r ncbi_dataset
 exit
