@@ -15,8 +15,8 @@ lOc=`echo -e "${i2}" | sed -e "s/_/@/" | cut -f 2 -d "@"` # locus tag
 dbNum=`wc -l < ../data/iDx.txt`
 
 ##### query sequence from reference genome #####
-seqLn=`grep -n ${lOc} ${aCc}_cds.fa | cut -f 1 -d ":"`
-head -n $(( ${seqLn} +1 )) ${aCc}_cds.fa | tail -n 2 > ../data/${i2}.fa
+seqLn=`grep -n ${lOc} ../data/${aCc}_cds.fa | cut -f 1 -d ":"`
+head -n $(( ${seqLn} +1 )) ../data/${aCc}_cds.fa | tail -n 2 > ../data/${i2}.fa
 
 ##### dN/dS data extraction #####
 for i4 in `seq 1 ${dbNum}`;do
