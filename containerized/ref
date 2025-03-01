@@ -10,6 +10,8 @@
 datasets download genome accession `cat $1` --include cds,gff3,genome && unzip ncbi_dataset.zip && rm ncbi_dataset.zip
 [[ -f README.md ]]&&rm README.md
 [[ -f md5sum.txt ]]&&rm md5sum.txt
+[[ -f iDx.csv ]]&&rm iDx.csv
+touch iDx.csv
 
 while read -r L;do
     L0=`echo -e "${L}" | sed -e "s/[.]//g" -e "s/_//g"`
@@ -18,7 +20,11 @@ while read -r L;do
     bash 00_ffn2fa.sh `ls ncbi_dataset/data/${L}/${L}*` ../data/${L0}_genomic
     bash gFlanking.sh ../data/${L0}_cds.fa ../data/${L0}_genomic.fa
     cat ../data/${L0}_cds-flanking.csv | cut -f 2 -d "," > ../data/${L0}_iDx.csv
+    while read -r L1;do
+        echo -e "${L0}_${L1}" >> iDx.csv
+    done < ../data/${L0}_iDx.csv
 done < $1
 
+rm ../data/${L0}_iDx.csv
 rm -r ncbi_dataset
 exit

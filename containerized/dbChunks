@@ -23,6 +23,10 @@ d1 = matrix(c(d0[,d1],rep(NA,mtLen-nrow(d0)%%mtLen)), nr = mtLen)
 
 nAm0 = strsplit(basename(argv[1]),"")[[1]]
 nAm1 = which(nAm0 == ".")
+n00 = substr(basename(argv[1]),1,nAm1[length(nAm1)]-1)
+
 for(i in 1:ncol(d1)){
-    write.table(d1[!is.na(d1[,i]),i], paste0(pT,i,"_",substr(basename(argv[1]),1,nAm1[length(nAm1)]-1),".txt"), col.names = F, quote = F, row.names = F)
+    write.table(d1[!is.na(d1[,i]),i], paste0(pT,i,"_",n00,".txt"), col.names = F, quote = F, row.names = F)
 };rm(i)
+
+write.table(paste0(1:ncol(d1),"_",n00), paste0(pT,"iDx.txt"), col.names = F, quote = F, row.names = F)

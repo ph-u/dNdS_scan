@@ -4,8 +4,8 @@
 # desc: Reformat blastn result into fasta format; match blastn result with env strain genomes
 # in: Rscript blastn2faByGene.r [../relative/path/blastnRES].txt [envGenome_dir]_iDx.txt
 # out: [../relative/path/blastnRES]--[geneName].fa
-# arg: 2
-# date: 20241119, 20241127
+# arg: 2|3
+# date: 20241119, 20241127, 20250301
 
 argv = (commandArgs(T))
 #argv = c("../data/1_GCA_000022165_STM14_2638.txt", "1_GCA_000022165_iDx.txt")
@@ -13,9 +13,18 @@ library(ape)
 
 blastnRES = read.table(argv[1], sep = "@", header = F)
 blastnRES[,2] = read.table(text=blastnRES[,2], sep = "|")[,2]
-srcG = as.character(read.FASTA(paste0(dirname(argv[1]),"/",sub("_iDx.txt$",".fa",argv[2])), type = "DNA"))
-envG = list.files(read.table(argv[2])[1,1],"fna")
-envG0 = list.files(read.table(argv[2])[1,1],"fna", full.names = T)
+
+if(length(argv)==3){ ## docker container
+    srcG = as.character(read.FASTA(argv[2], type = "DNA"))
+    envPT = paste0("../data/", read.table("../data/iDx.txt")[as.numeric(argv[3]),1], "/", collapse = "")
+    envG = list.files(envPT, "fna")
+    envG0 = list.files(envPT, "fna", full.names = T)
+    rm(envPT)
+}else{
+    srcG = as.character(read.FASTA(paste0(dirname(argv[1]),"/",sub("_iDx.txt$",".fa",argv[2])), type = "DNA"))
+    envG = list.files(read.table(argv[2])[1,1],"fna")
+    envG0 = list.files(read.table(argv[2])[1,1],"fna", full.names = T)
+}
 
 ##### Map contig names with genome name #####
 cat("Contig-Genome mapping starts:",date(),"\n")
@@ -53,6 +62,10 @@ cat("Genome matching starts:",date(),"\n")
   }
 cat("Genome matching done:",date(),"\n")
   if(e0==0){ r0 = c(srcG[sg0], dna0, x0) }else{ r0 = c(srcG[sg0], dna0) }
-  write.FASTA(as.DNAbin(r0),sub(".txt$",paste0("--",gNam,"_db.fa"),argv[1]))
+    if(length(argv)==3){ # docker container
+      write.FASTA(as.DNAbin(r0), sub("[.]fa","_db.fa",sub("_","-",argv[2])))
+    }else{
+      write.FASTA(as.DNAbin(r0),sub(".txt$",paste0("--",gNam,"_db.fa"),argv[1]))
+    }
 };rm(i)
 cat("blastn2faByGene.r done:",date(),"\n")

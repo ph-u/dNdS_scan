@@ -10,10 +10,12 @@
 bNam=`basename $1 | rev | sed -e "s/[.]/@/" | cut -f 2 -d "@" | rev`
 [[ -f ${bNam}.fa ]]&&rm ${bNam}.fa
 touch ${bNam}.fa
+mkdir -p ../data/${bNam}
 
 while read -r L;do
     datasets download genome accession ${L} --include genome && unzip ncbi_dataset.zip && rm {README.md,md5sum.txt,ncbi_dataset.zip}
     cat `find ncbi_dataset/ | grep -e "_genomic.fna$"` >> ${bNam}.fa
+    mv `find ncbi_dataset/ | grep -e "_genomic.fna$"` ../data/${bNam}/
     rm -r ncbi_dataset/
 done < $1
 

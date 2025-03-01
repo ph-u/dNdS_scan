@@ -1,15 +1,38 @@
 #!/bin/bash
 # author: ph-u
 # script: dnds
-# desc: overall pipeline for ORF identification & dN/dS calculation
-# in: dnds [line number for a gene] [reference accession number]
+# desc: overall pipeline for ORF identification & dN/dS calculation (fuse and modify blastn_c.sh & dbSum_c.sh)
+# in: dnds [line number for a gene]
 # out: NA
 # arg: 2
 # date: 20250222
 
-refAcc=`echo -e "$2" | sed -e "s/[.]//g" -e "s/_//g"`
-head -n 26 blastn_c.sh | tail -n 12 | sed -e "s/iDx/../data/${refAcc}_iDx" > dnds.sh
-tail -n +11 dbSum_c.sh | sed -e "s/iDx/../data/${refAcc}_iDx" >> dnds.sh
+tID=$1
 
-bash dnds.sh $1
+i2=`head -n ${tID} ../data/iDx.csv | tail -n 1 | cut -f 1 -d ","` # Acc_locus
+aCc=`echo -e "${i2}" | cut -f 1 -d "_"` # accession number
+lOc=`echo -e "${i2}" | cut -f 2 -d "_"` # locus tag
+dbNum=`wc -l < ../data/iDx.txt`
+
+##### query sequence from reference genome #####
+seqLn=`grep -n ${lOc} ${aCc}_cds.fa | cut -f 1 -d ":"`
+head -n $(( ${seqLn} +1 )) ${aCc}_cds.fa | tail -n 2 > ../data/${i2}.fa
+
+##### dN/dS data extraction #####
+for i4 in `seq 1 ${dbNum}`;do
+    i1=`head -n ${i4} ../data/iDx.txt | tail -n 1`
+    echo -e "`date` - ${i1}: ${i4} / ${dbNum}"
+
+## blast
+    ./blastn -query ../data/${i2}.fa -db `echo -e "${i1}" | rev | cut -f 1 -d "/" | rev` -out ../data/${i2}.txt -outfmt "6 delim=@ qseqid sseqid sstart send sstrand sseq" -max_target_seqs 1000 -subject_besthit
+    Rscript blastn2faByGene.r ../data/${i2}.txt ../data/${i2}.fa ${i4}
+
+## dN/dS calculation
+    i0="../data/${aCc}-${lOc}_db.fa"
+    Rscript dbSum.r ${i0}
+    Rscript rDNDS.r ${i0}
+done
+
+rm ../data/${i2}.fa
+rm ../data/${i2}.txt
 exit
