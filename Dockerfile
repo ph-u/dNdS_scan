@@ -3,7 +3,7 @@ LABEL org.opencontainers.image.source="https://github.com/ph-u/dNdS_scan"
 RUN apt-get update && apt-get -y install wget ncbi-blast+
 RUN mkdir -p data && mkdir -p res
 RUN Rscript -e "install.packages('ape', dependencies = T);install.packages('BiocManager', dependencies = T);BiocManager::install('Biostrings', version='3.18')"
-RUN wget 'https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/datasets'
+#RUN wget 'https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/datasets'
 
 ARG CACHEBUST
 RUN echo "$CACHEBUST"
