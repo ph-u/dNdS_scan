@@ -1,6 +1,11 @@
 FROM rocker/r-base:4.3.1
 LABEL org.opencontainers.image.source="https://github.com/ph-u/dNdS_scan"
-RUN apt-get update && apt-get -y install wget ncbi-blast+ && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 6 && apt-get install libgfortran3 && apt autoremove
+RUN apt-get update && apt-get -y install wget ncbi-blast+
+#RUN apt-get install g++-6 && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 6 && apt-get install libgfortran3 && apt autoremove
+
+##### lib dependency: libgfortran3 #####
+# https://gist.github.com/sakethramanujam/faf5b677b6505437dbdd82170ac55322
+RUN wget -O - https://gist.githubusercontent.com/sakethramanujam/faf5b677b6505437dbdd82170ac55322/raw/c306b71253ec50fb55d59f935885773d533b565c/install-libgfortran3.sh | bash
 
 RUN mkdir -p data
 RUN Rscript -e "install.packages('ape', dependencies = T);install.packages('BiocManager', dependencies = T);BiocManager::install('Biostrings', version='3.18')"
