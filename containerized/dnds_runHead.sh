@@ -7,7 +7,7 @@
 # arg: 1
 # date: 20250301
 
-#SBATCH -A [Group Account name]
+#SBATCH -A Group-Account-name
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --mail-type=NONE
