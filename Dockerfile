@@ -3,7 +3,7 @@ LABEL org.opencontainers.image.source="https://github.com/ph-u/dNdS_scan"
 RUN apt-get update && apt-get -y install wget ncbi-blast+
 
 ##### Get pkg dependency libgfortran.so.3 #####
-RUN deb http://gb.archive.ubuntu.com/ubuntu/ bionic main universe
+RUN add-apt-repository bionic main universe
 RUN apt-get install g++-6 && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 6 && apt-get install libgfortran3
 
 RUN mkdir -p data
