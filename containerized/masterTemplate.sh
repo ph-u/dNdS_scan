@@ -2,11 +2,16 @@
 # author: ph-u
 # script: masterTemplate.sh
 # desc: template pipeline, need modifications/segregating sections
-# in: bash masterTemplate.sh [../relative/path/2/refGenomes_list].txt [../relative/path/2/total_blastdb_accession_list].txt
+# in: bash masterTemplate.sh [stage] [../relative/path/2/refGenomes_list].txt [../relative/path/2/total_blastdb_accession_list].txt
 # out: NA
 # arg: 
 # date: 20250224
 
+[[ -z $3 ]] && head -n 5 $0 | tail -n 1 && exit
+[[ $1 -gt 2 ]] && sTage=2 || sTage=$1
+[[ $1 -lt 1 ]] && sTage=1 || sTage=$1
+
+if [[ ${sTage} -eq 1 ]];then
 ##### Stage 0: Prepare accession lists #####
 # Note that NCBI accession number format: GCF_000... or GCA_000...
 # 1. txt file containing accession numbers of reference genomes, one line per number
@@ -21,6 +26,7 @@ for i in `ls ../data/*_$2`;do
     apptainer run --bind ${PWD}:/data dnds_scan_latest.sif db ../data/${i} & #[../relative/path/2/blastdb_accession_list].txt
 done
 
+else
 ##### Stage 2: Write & Run dN/dS calculations #####
 printf "Assembling run-script (`date`)"
 
@@ -36,5 +42,5 @@ while read -r L;do
 done < ../data/freqSLURM.txt
 
 printf " -- Done (`date`)\n"
-
+fi
 exit
