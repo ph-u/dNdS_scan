@@ -1,7 +1,7 @@
 FROM rocker/r-base:4.3.1
 LABEL org.opencontainers.image.source="https://github.com/ph-u/dNdS_scan"
 RUN apt-get update && apt-get -y install wget ncbi-blast+
-RUN mkdir -p data
+RUN mkdir -p data && mkdir -p src
 RUN Rscript -e "install.packages('ape', dependencies = T);install.packages('BiocManager', dependencies = T);BiocManager::install('Biostrings', version='3.18')"
 #RUN wget 'https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/datasets'
 
@@ -28,4 +28,4 @@ RUN bash /binHPC2/install-libgfortran3.sh
 #RUN rm -r /dNdS_scan-master
 ENV PATH="/binHPC2:${PATH}"
 WORKDIR /binHPC2
-CMD ["cp", "/binHPC2/masterTemplate.sh", "/data/"]
+CMD ["cp", "/binHPC2/masterTemplate.sh", "${CWD}"]

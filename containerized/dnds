@@ -8,9 +8,9 @@
 # date: 20250222
 
 tID=$1
+i2=`head -n ${tID} iDx.csv | tail -n 1 | cut -f 1 -d ","` # Acc_locus, at ${CWD}
 
-p00=${PWD}
-i2=`head -n ${tID} iDx.csv | tail -n 1 | cut -f 1 -d ","` # Acc_locus
+cd /binHPC2
 aCc=`echo -e "${i2}" | cut -f 1 -d "_"` # accession number
 lOc=`echo -e "${i2}" | sed -e "s/_/@/" | cut -f 2 -d "@"` # locus tag
 dbNum=`wc -l < ../data/iDx.txt`
@@ -26,12 +26,12 @@ for i4 in `seq 1 ${dbNum}`;do
 
 ## blast
     blastn -query ../data/${i2}.fa -db `echo -e "${i1}" | rev | cut -f 1 -d "/" | rev` -out ../data/${i2}.txt -outfmt "6 delim=@ qseqid sseqid sstart send sstrand sseq" -max_target_seqs 1000 -subject_besthit
-    Rscript /binHPC2/blastn2faByGene.r ../data/${i2}.txt ../data/${i2}.fa ${i4}
+    Rscript blastn2faByGene.r ../data/${i2}.txt ../data/${i2}.fa ${i4}
 
 ## dN/dS calculation
     i0="../data/${aCc}-${lOc}_db.fa"
-    Rscript /binHPC2/dbSum.r ${i0}
-    Rscript /binHPC2/rDNDS.r ${i0}
+    Rscript dbSum.r ${i0}
+    Rscript rDNDS.r ${i0}
 done
 
 rm ../data/${i2}.fa
