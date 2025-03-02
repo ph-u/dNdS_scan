@@ -20,22 +20,20 @@ seqLn=`grep -n ${lOc} ../data/${aCc}_cds.fa | cut -f 1 -d ":"`
 head -n $(( ${seqLn} +1 )) ../data/${aCc}_cds.fa | tail -n 2 > ../data/${i2}.fa
 
 ##### dN/dS data extraction #####
-cd /binHPC2
 for i4 in `seq 1 ${dbNum}`;do
     i1=`head -n ${i4} ../data/iDx.txt | tail -n 1`
     echo -e "`date` - ${i1}: ${i4} / ${dbNum}"
 
 ## blast
     blastn -query ../data/${i2}.fa -db `echo -e "${i1}" | rev | cut -f 1 -d "/" | rev` -out ../data/${i2}.txt -outfmt "6 delim=@ qseqid sseqid sstart send sstrand sseq" -max_target_seqs 1000 -subject_besthit
-    Rscript blastn2faByGene.r ../data/${i2}.txt ../data/${i2}.fa ${i4}
+    Rscript /binHPC2/blastn2faByGene.r ../data/${i2}.txt ../data/${i2}.fa ${i4}
 
 ## dN/dS calculation
     i0="../data/${aCc}-${lOc}_db.fa"
-    Rscript dbSum.r ${i0}
-    Rscript rDNDS.r ${i0}
+    Rscript /binHPC2/dbSum.r ${i0}
+    Rscript /binHPC2/rDNDS.r ${i0}
 done
 
-cd ${p00}
 rm ../data/${i2}.fa
 rm ../data/${i2}.txt
 exit
