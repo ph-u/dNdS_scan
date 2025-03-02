@@ -24,6 +24,4 @@ RUN for i in `ls /binHPC2/*`;do chmod 755 ${i};done
 #RUN rm -r /dNdS_scan-master
 ENV PATH="/binHPC2:${PATH}"
 WORKDIR /binHPC2
-RUN cp masterTemplate.sh /data/
-RUN cp dnds_runHead.sh /data/
-CMD ["echo", "dNdS_scan (in docker)"]
+CMD ["cp", "{masterTemplate.sh,dnds_runHead.sh}", "/data/"]
