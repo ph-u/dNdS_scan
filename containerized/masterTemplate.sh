@@ -38,8 +38,7 @@ while read -r L;do
   i=`echo -e "${L}" | rev | sed -e "s/ /@/" | cut -f 1 -d "@" | rev` # accession num
   iSt=`grep -n ${i} iDx.csv | head -n 1 | cut -f 1 -d ":"` # first cds in genome
   iEd=`grep -n ${i} iDx.csv | tail -n 1 | cut -f 1 -d ":"` # last cds in genome
-  sed -e "s/Group-Account-name/${gpNam}/" dnds_runHead.sh > dNdS_${i}.sh
-  echo -e "#SBATCH -J ${i}\n#SBATCH --array=${iSt}-${iEd}\n\napptainer run --bind ${PWD}:/data dnds_scan_latest.sif dnds ${p0}" >> dNdS_${i}.sh
+  echo -e "#!/bin/env bash\n# author: ph-u (docker container)\n# in: bash dNdS_${i}.sh\n# date: `date`\n#SBATCH -A ${gpNam}\n#SBATCH --nodes=1\n#SBATCH --ntasks=1\n#SBATCH --mail-type=NONE\n#SBATCH --requeue\n#SBATCH -p icelake-himem\n#SBATCH --time=12:00:00\n#SBATCH -J ${i}\n#SBATCH --array=${iSt}-${iEd}\n\napptainer run --bind ${PWD}:/data dnds_scan_latest.sif dnds ${p0}" >> dNdS_${i}.sh
 done < ../data/freqSLURM.txt
 [[ -f dNdS_.sh ]]&&rm dNdS_.sh
 
