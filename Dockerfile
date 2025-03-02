@@ -28,4 +28,4 @@ RUN bash /binHPC2/install-libgfortran3.sh
 #RUN rm -r /dNdS_scan-master
 ENV PATH="/binHPC2:${PATH}"
 WORKDIR /binHPC2
-CMD ["cp", "/binHPC2/masterTemplate.sh", "${CWD}"]
+CMD ["cp", "/binHPC2/masterTemplate.sh", "masterTemplate.sh"]
