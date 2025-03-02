@@ -5,7 +5,7 @@ RUN apt-get update && apt-get -y install wget ncbi-blast+
 
 ##### lib dependency: libgfortran3 #####
 # https://gist.github.com/sakethramanujam/faf5b677b6505437dbdd82170ac55322
-RUN wget -O - https://gist.githubusercontent.com/sakethramanujam/faf5b677b6505437dbdd82170ac55322/raw/c306b71253ec50fb55d59f935885773d533b565c/install-libgfortran3.sh | bash
+RUN wget https://gist.githubusercontent.com/sakethramanujam/faf5b677b6505437dbdd82170ac55322/raw/c306b71253ec50fb55d59f935885773d533b565c/install-libgfortran3.sh && bash install-libgfortran3.sh && rm install-libgfortran3.sh
 
 RUN mkdir -p data
 RUN Rscript -e "install.packages('ape', dependencies = T);install.packages('BiocManager', dependencies = T);BiocManager::install('Biostrings', version='3.18')"
