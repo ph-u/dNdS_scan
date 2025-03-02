@@ -9,6 +9,7 @@
 
 tID=$1
 
+p00=${PWD}
 i2=`head -n ${tID} iDx.csv | tail -n 1 | cut -f 1 -d ","` # Acc_locus
 aCc=`echo -e "${i2}" | cut -f 1 -d "_"` # accession number
 lOc=`echo -e "${i2}" | sed -e "s/_/@/" | cut -f 2 -d "@"` # locus tag
@@ -19,6 +20,7 @@ seqLn=`grep -n ${lOc} ../data/${aCc}_cds.fa | cut -f 1 -d ":"`
 head -n $(( ${seqLn} +1 )) ../data/${aCc}_cds.fa | tail -n 2 > ../data/${i2}.fa
 
 ##### dN/dS data extraction #####
+cd /binHPC2
 for i4 in `seq 1 ${dbNum}`;do
     i1=`head -n ${i4} ../data/iDx.txt | tail -n 1`
     echo -e "`date` - ${i1}: ${i4} / ${dbNum}"
@@ -33,6 +35,7 @@ for i4 in `seq 1 ${dbNum}`;do
     Rscript rDNDS.r ${i0}
 done
 
+cd ${p00}
 rm ../data/${i2}.fa
 rm ../data/${i2}.txt
 exit
