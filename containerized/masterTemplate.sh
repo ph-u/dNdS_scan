@@ -41,6 +41,7 @@ while read -r L;do
   sed -e "s/Group-Account-name/${gpNam}/" dnds_runHead.sh > dNdS_${i}.sh
   echo -e "#SBATCH -J ${i}\n#SBATCH --array=${iSt}-${iEd}\n\napptainer run --bind ${PWD}:/data dnds_scan_latest.sif dnds ${p0}" >> dNdS_${i}.sh
 done < ../data/freqSLURM.txt
+[[ -f dNdS_.sh ]]&&rm dNdS_.sh
 
 printf " -- Done (`date`)\n"
 echo -e "Now you can run \` sbatch dNdS_xxx.sh \` to the SLURM system"
