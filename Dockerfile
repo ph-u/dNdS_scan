@@ -1,7 +1,7 @@
 FROM rocker/r-base:4.3.1
 LABEL org.opencontainers.image.source="https://github.com/ph-u/dNdS_scan"
-RUN apt-get update && apt-get -y install wget ncbi-blast+ libxml2-dev &&\
-    install.r -e -s -d TRUE BiocManager &&\
+RUN apt-get update && apt-get -y install wget ncbi-blast+ libxml2-dev
+RUN install.r -e -s -d TRUE BiocManager &&\
     install2.r -e -s -d TRUE ape &&\
     installBioc.r -e -s -d TRUE Biostrings &&\
     rm -rf /tmp/downloaded_packages && rm -rf /var/lib/apt/lists/*
