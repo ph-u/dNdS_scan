@@ -40,5 +40,5 @@ for i4 in `seq 1 ${dbNum}`;do
 done
 
 rm ../data/${i2}.fa
-#rm ../data/${i2}.txt
+rm ../data/${i2}.txt
 exit
