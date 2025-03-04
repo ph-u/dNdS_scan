@@ -20,11 +20,10 @@ if [[ ${sTage} -eq 1 ]];then
 mkdir -p ../data #&& apptainer pull docker://ghcr.io/ph-u/dnds_scan:latest
 
 ##### Stage 1: Reference genome & blastn database preparation #####
-apptainer run --bind ${PWD}:/data dnds_scan_latest.sif ref ${refG} & #../src_log/ecoli_refGenome.txt &
-
-apptainer run --bind ${PWD}:/data dnds_scan_latest.sif dbChunks ${totDB} #../src_log/ecoli_blastdbACC.txt
+apptainer run --bind ../data:/data dnds_scan_latest.sif ref ${refG} &
+apptainer run --bind ../data:/data dnds_scan_latest.sif dbChunks ${totDB}
 for i in `ls ../data/*_${totDB}`;do
-    apptainer run --bind ${PWD}:/data dnds_scan_latest.sif db ../data/${i} & #[../relative/path/2/blastdb_accession_list].txt
+    apptainer run --bind ../data:/data dnds_scan_latest.sif db ../data/${i} &
 done
 
 else
