@@ -1,7 +1,7 @@
 FROM rocker/r-base:4.3.1
 RUN apt-get update && apt-get -y install wget ncbi-blast+ libxml2-dev libcurl4-openssl-dev libssl-dev liblapack-dev libblas-dev
 RUN R -q -e "install.packages('BiocManager', dependencies = T);options(warn=2);install.packages('ape', version='5.8', dependencies = T);BiocManager::install('Biostrings', version = '3.18');BiocManager::install('preprocessCore')"
-#ENV LD_LIBRARY_PATH="/usr/lib/R/lib:/usr/lib:${LD_LIBRARY_PATH}"
+ENV LD_LIBRARY_PATH="/usr/lib/R/lib:/usr/lib:${LD_LIBRARY_PATH}"
 #RUN install.r -e -s -d TRUE BiocManager && install2.r -e -s -d TRUE ape && installBioc.r -e -s -d TRUE Biostrings && rm -rf /tmp/downloaded_packages && rm -rf /var/lib/apt/lists/*
 RUN mkdir -p data
 #RUN wget 'https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/datasets'
