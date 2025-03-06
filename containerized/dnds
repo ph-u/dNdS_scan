@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 # author: ph-u
 # script: dnds
 # desc: overall pipeline for ORF identification & dN/dS calculation (fuse and modify blastn_c.sh & dbSum_c.sh)

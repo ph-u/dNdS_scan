@@ -28,6 +28,7 @@ RUN bash /binHPC2/install-libgfortran3.sh
 ##### Set env #####
 #RUN rm -r /dNdS_scan-master
 ENV PATH="/binHPC2:${PATH}"
+ENV R_LIBS="/usr/local/lib/R/library"
 ENV LD_LIBRARY_PATH="/usr/lib/R/lib:/usr/lib:${LD_LIBRARY_PATH}"
 WORKDIR /binHPC2
 CMD ["cp", "/binHPC2/masterTemplate.sh", "masterTemplate.sh"]
