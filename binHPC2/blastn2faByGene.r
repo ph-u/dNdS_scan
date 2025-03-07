@@ -50,7 +50,7 @@ dOne = c(); for(i in 1:length(uniQ)){
 
 cat("Genome matching starts:",date(),"\n")
 ## Match genome names
-  br0$genome = apply(br0,1,function(x){return(grep(x[2], envNode$nNam))})
+  br0$genome = apply(br0,1,function(x){return(grep(paste0("^",x[2], collapse = ""), envNode$nNam))})
   names(dna0) = paste0(envNode$fNam[br0$genome],";",br0[,2],";",br0[,3],"-",br0[,4],";",br0[,5])
 
 ## Add in noHit genomes if any
