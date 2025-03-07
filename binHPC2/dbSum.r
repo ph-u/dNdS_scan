@@ -21,6 +21,7 @@ argv = aRg[grep("_db.fa",aRg)]
 db.flk = 100 # flanking region length
 
 ## import
+cat(date(),": dbSum.r data import start\n")
 f = as.character(read.FASTA(paste0(pT[1], argv[1]), type="DNA"))
 fNam = sub("_db.fa","",argv)
 fNam = strsplit(fNam,"--")[[1]]
@@ -50,7 +51,7 @@ if(file.exists(oNam)){
 if(i0 <= nrow(r0)){ for(i in i0:nrow(r0)){
     db.nam = strsplit(names(f)[i+1], ";")[[1]]
     db.nRec = strsplit(sub("_geno","@",db.nam[1]), "@")[[1]][1]
-    cat(i,"/",nrow(r0),"(",round(i/nrow(r0)*100),"% ;",db.nRec,")", date(), "\n")
+    cat(date(),": ",i,"/",nrow(r0),"(",round(i/nrow(r0)*100),"% ;",db.nRec,")", date(), "\r")
     if(db.nam[2]=="noHit"){ r0[i,c(1,3)] = c(db.nRec,db.nam[2]) }else{
         r0[i,1:2] = c(db.nRec,db.nam[2])
 
