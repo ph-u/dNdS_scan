@@ -21,6 +21,7 @@ seqLn=`grep -n ${lOc} ../data/${aCc}_cds.fa | cut -f 1 -d ":"`
 head -n $(( ${seqLn} +1 )) ../data/${aCc}_cds.fa | tail -n 2 > ../data/${i2}.fa
 
 ##### dN/dS data extraction #####
+echo -e "`whereis Rscript`"
 for i4 in `seq 1 ${dbNum}`;do
     i1=`head -n ${i4} ../data/iDx.txt | tail -n 1`
     echo -e "`date` - ${i1}: ${i4} / ${dbNum}"
