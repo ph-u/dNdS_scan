@@ -2,14 +2,14 @@
 # author: ph-u
 # script: dbChunks
 # desc: get accession number chunks for blast make databases
-# in: Rscript dbChunks [overall accession list]
+# in: Rscript dbChunks [overall accession list] [chunk size]
 # out: data/*_[overall accession list].txt
 # arg: 1
 # date: 20250223
 
 argv = (commandArgs(T))
 pT = "../data/" # singularity directory bind
-mtLen = 750
+mtLen = as.numeric(argv[2])
 d0 = read.table(argv[1], sep = "\t", header = T, quote = "")
 
 ##### Get GCF/GCA column #####
