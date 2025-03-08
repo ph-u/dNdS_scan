@@ -9,16 +9,19 @@
 
 bNam=`basename $1 | rev | sed -e "s/[.]/@/" | cut -f 2 -d "@" | rev`
 [[ -f ${bNam}.fa ]]&&rm ${bNam}.fa
-touch ${bNam}.fa
 mkdir -p ../data/${bNam}
 
-while read -r L;do
-    datasets download genome accession ${L} --include genome --filename ${L}.zip && unzip ${L}.zip -d ../data/${bNam} && rm {../data/${bNam}/README.md,../data/${bNam}/md5sum.txt,${L}.zip} && mv ../data/${bNam}/ncbi_dataset ncbi_${L}
-    cat `find ncbi_${L}/ | grep -e "_genomic.fna$"` >> ${bNam}.fa
-    mv `find ncbi_${L}/ | grep -e "_genomic.fna$"` ../data/${bNam}/
-    rm -r ncbi_${L}/
-done < $1
+if [[ `wc -l < $1` != `ls ../data/${bNam} | wc -l` ]];then
+  touch ${bNam}.fa
 
-makeblastdb -in ${bNam}.fa -dbtype nucl -parse_seqids -out ../data/${bNam} -title ${bNam} # singularity binding home directory
-rm ${bNam}.fa
+  while read -r L;do
+      datasets download genome accession ${L} --include genome --filename ${L}.zip && unzip ${L}.zip -d ../data/${bNam} && rm {../data/${bNam}/README.md,../data/${bNam}/md5sum.txt,${L}.zip} && mv ../data/${bNam}/ncbi_dataset ncbi_${L}
+      cat `find ncbi_${L}/ | grep -e "_genomic.fna$"` >> ${bNam}.fa
+      mv `find ncbi_${L}/ | grep -e "_genomic.fna$"` ../data/${bNam}/
+      rm -r ncbi_${L}/
+  done < $1
+
+  makeblastdb -in ${bNam}.fa -dbtype nucl -parse_seqids -out ../data/${bNam} -title ${bNam} # singularity binding home directory
+  rm ${bNam}.fa
+fi
 exit
