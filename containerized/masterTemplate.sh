@@ -28,7 +28,7 @@ if [[ ${sTage} -eq 1 ]];then
 ##### Stage 2: blastn database preparation #####
 elif [[ ${sTage} -eq 2 ]];then
   [[ -f blastdb-download.sh ]]&&rm blastdb-download.sh
-  p0=`echo -e "$ \{SLURM_ARRAY_TASK_ID\}" | sed -e "s/ //"`
+  p0=`echo -e "$ {SLURM_ARRAY_TASK_ID}" | sed -e "s/ //"`
 
   printf "Assembling blastdb-download run-script (`date`)"
   echo -e "#!/bin/env bash\n# author: ph-u (docker container)\n# in: sbatch blastdb-download.sh\n# date: `date`\n#SBATCH -A ${gpNam}\n#SBATCH --nodes=1\n#SBATCH --ntasks=1\n#SBATCH --mail-type=NONE\n#SBATCH --requeue\n#SBATCH -p icelake-himem\n#SBATCH --time=12:00:00\n#SBATCH -J db_IN\n#SBATCH --array=1-`ls ../data/*_${totDB} | wc -l`\n\napptainer run --bind ${PWD}/../data:/data dnds_scan_latest.sif db ../data/${p0}_${totDB}" >> blastdb-download.sh
@@ -40,7 +40,7 @@ else
   printf "Assembling dN/dS run-script (`date`)"
 
   [[ `ls | grep -e "dNdS_G" | grep -e ".sh" | wc -l` -gt 0 ]]&&rm dNdS_G*.sh
-  p0=`echo -e "$ \{SLURM_ARRAY_TASK_ID\}" | sed -e "s/ //"`
+  p0=`echo -e "$ {SLURM_ARRAY_TASK_ID}" | sed -e "s/ //"`
 
   while read -r L;do
     i=`echo -e "${L}" | rev | sed -e "s/ /@/" | cut -f 1 -d "@" | rev` # accession num
