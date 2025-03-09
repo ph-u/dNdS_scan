@@ -43,7 +43,7 @@ for i4 in `seq 1 ${dbNum}`;do
       Rscript blastn2faByGene.r ../data/${aCc}+${lOcNam}.txt ../data/${i2}+${lOcNam}.fa ${i4}
 
 ## dN/dS calculation
-      i0="../data/${aCc}+${lOcNam}-${lOc}_db.fa"
+      i0="../data/${aCc}-${lOc}+${lOcNam}_db.fa"
       Rscript dbSum.r ${i0}
       Rscript rDNDS.r ${i0}
     else
