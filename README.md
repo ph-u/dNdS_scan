@@ -1,23 +1,39 @@
-# dNdS gene-by-gene comparative genomics pipeline
+# Quantifying natural selection
+
+> [!NOTE]
+> Wang _et al_ 2025. Nature Communications. DOI: [10.1038/s41467-025-57532-z](https://doi.org/10.1038/s41467-025-57532-z)
+
+## Quick start
+
+1. `[[ -f dnds\_scan\_latest.sif ]]&&rm dnds_scan_latest.sif`
+0. `apptainer pull docker://ghcr.io/ph-u/dnds_scan:latest && apptainer run dnds_scan_latest.sif`
+0. `bash masterTemplate.sh 1 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt 20 &`
+0. `bash masterTemplate.sh 2 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt`
+0. `bash masterTemplate.sh 3 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt`
+
+> [!WARNING]
+> Before running the d~N~/d~S~ scan, remember to check all fasta files for the databases are successfully downloaded from NCBI. You can check by contrasting between `wc -l < ../data/NCBI-accession-list-subset.txt` and `ls ../data/NCBI-accession-list-subset/*_genomic.fna | wc -l`  
+> NCBI will refuse frequent connections, so for a large set of genomes, smaller chunk sizes will lead to more frequent connection refusal.  
+> So you might need to **run step 2 multiple times**.
+
+## Options
+- `proj-account`: the SLURM group account you have access to
+- `ref-genome-accession-list.txt`: a list of accession numbers (`GCA_*` or `GCF_*`) that are used as reference genome(s)
+- `NCBI-accession-list.txt`: a list of accession numbers that will be made into NCBI blast databases; you can use a metadata summary file (with accession numbers as the first column, with/without header) directly downloaded from the NCBI `datasets` tool (CSV format is acceptable)
+- `20`: recommended number of genomes in a blast database for whole genome d~N~/d~S~ scanning, could be higher for short ORF sequences (highest number tested: 750)
 
 ## Computational requirements
 
-1. Install blastn program from NCBI, program within `dNdSGenome/` directory ([NCBI blast](https://blast.ncbi.nlm.nih.gov/doc/blast-help/downloadblastdata.html))
-0. Use Genbank annotated database (GCA\_\*), can be downloaded via the NCBI datasets toolbox ([NCBI datasets](https://www.ncbi.nlm.nih.gov/datasets/docs/v2/download-and-install/))
-0. (<=v2.0) Construct NCBI databases, one genome one database, all files (including the raw genomic file (with extension `.fna`) store within `dNdSGenome/` directory (use the `makeblastdb` tool within the "NCBI blast" toolbox)
-0. (>=v3.0) Construct one NCBI database with all draft genomes and retain all raw unannotated genomes within the directory tree as the `binHPC2/` directory
+1. `apptainer`/`singularity` installed on High Performance Computer cluster
+0. SLURM manager - `masterTemplate.sh` need slight modifications for other systems, such as PBS
 
-## Steps
+> [!TIP]
+> You may extract the `ref-genome-accession-list.txt` and `NCBI-accession-list.txt` using the [NCBI datasets](https://www.ncbi.nlm.nih.gov/datasets/docs/v2/download-and-install/) tool
 
-### Preprocessing
+## Other Individual commands available
 
-1. `bash 00\_ffn2fa.sh [../relative/path/2/reference\_cds\_genome.ffn]`: require a `raw/` directory at the same level as the `src/` directory
-0. `bash 01\_genomeFlanking.sh [../relative/2/reference\_cds\_genome.fa] [../path/2/reference_genomic.fa] [(optional) flanking region length]`: Both `.fa` fasta files should be pre-processed in the above step, converting multiple-lined sequences to single-lined sequences
-0. `bash 00\_mkdbBLASTN.sh [../relative/path/2/sourceFasta] [../relative/path/2/dbDirectory]`
-0. (<=v2.0) move all generated files fropm the last step, also their respective source fasta files (should be with extension `.fna`), to the `dNdSGenome/` (v1.0) or `binHPC/` (v2.0) directory
-
-### Pipeline (in SLURM-mediated high performance computer)
-
-v3.0 binHPC2/ (doi:)  
-v2.0 binHPC/ (doi:)  
-v1.0 dNdSGenome/ (doi:)
+- `apptainer run --bind ../data:/data dnds_scan_latest.sif ref ref-genome-accession-list.txt`: format reference genome only
+- `apptainer run --bind ../data:/data dnds_scan_latest.sif db NCBI-accession-list-subset.txt`
+- `apptainer run --bind ../data:/data dnds_scan_latest.sif dbChunks NCBI-accession-list.txt 20`
+- `apptainer run --bind ../data:/data dnds_scan_latest.sif dnds 2`
+- `apptainer shell --bind ../data:/data dnds_scan_latest.sif`

@@ -12,9 +12,7 @@ bNam=`basename $1 | rev | sed -e "s/[.]/@/" | cut -f 2 -d "@" | rev`
 mkdir -p ../data/${bNam}
 
 if [[ `wc -l < $1` != `ls ../data/${bNam} | wc -l` ]];then
-  touch ${bNam}.fa
-
-  datasets download genome accession `cat $1` --dehydrated --include genome --filename ${bNam}.zip && unzip ${bNam}.zip -d ../data/${bNam}_r && datasets rehydrate --directory ../data/${bNam}_r/
+  datasets download genome accession `cat $1` --dehydrated --include genome --filename ${bNam}.zip && unzip ${bNam}.zip -d ../data/${bNam}_r && datasets rehydrate --directory ../data/${bNam}_r/ && rm ${bNam}.zip
 
   for i in `find ../data/${bNam}_r/ | grep -e "_genomic.fna$"`;do
     mv ${i} ../data/${bNam}/
