@@ -22,7 +22,7 @@ numGene=`grep -e "${aCc}" ../data/freqSLURM.txt | rev | cut -f 2 -d " " | rev`
 if [[ ${tID} -lt ${numGene} ]];then
   lOc1=${tID}
 else
-  lOc1=$(( ${tID} +1 -`grep -n "${aCc}" iDx.csv | head -n 1 | cut -f 1 -d ":"` ))
+  lOc1=$(( ${tID} +1 -`grep -n "${aCc}" ${CWD}/iDx.csv | head -n 1 | cut -f 1 -d ":"` ))
 fi
 lOc2=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 3,4 -d "," | sed -e "s/,/../"`
 lOcNam=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 3,4 -d "," | sed -e "s/,//"`
