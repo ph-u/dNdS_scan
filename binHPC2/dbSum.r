@@ -9,6 +9,7 @@
 
 argv = (commandArgs(T))
 #argv = "1_GCA_000022165_STM14_0013"
+if(length(grep("_db.fa", argv))>0){inFile=argv}else{inFile=0} # docker
 cat(argv,":",date(),"\n")
 
 source("src_dNdS.r"); library(ape); library(Biostrings)
@@ -22,7 +23,12 @@ db.flk = 100 # flanking region length
 
 ## import
 cat(date(),": dbSum.r data import start\n")
-f = as.character(read.FASTA(paste0(pT[1], argv[1]), type="DNA"))
+if(inFile==0){
+  f = as.character(read.FASTA(paste0(pT[1], argv[1]), type="DNA"))
+}else{ # docker
+  f = as.character(read.FASTA(inFile, type="DNA"))
+  argv=inFile
+}
 fNam = sub("_db.fa","",argv)
 fNam = strsplit(fNam,"--")[[1]]
 fNam = c(fNam, sub(paste0("_",fNam[2]),"",fNam[1]))
