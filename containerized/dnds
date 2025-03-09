@@ -10,7 +10,6 @@
 tID=$1
 i2=`head -n ${tID} iDx.csv | tail -n 1 | cut -f 1 -d ","` # Acc_locus, at ${CWD}
 
-cd /binHPC2
 touch ../data/noHit.log
 aCc=`echo -e "${i2}" | cut -f 1 -d "_"` # accession number
 lOc=`echo -e "${i2}" | sed -e "s/_/@/" | cut -f 2 -d "@"` # locus tag
@@ -22,7 +21,7 @@ numGene=`grep -e "${aCc}" ../data/freqSLURM.txt | rev | cut -f 2 -d " " | rev`
 if [[ ${tID} -lt ${numGene} ]];then
   lOc1=${tID}
 else
-  lOc1=$(( ${tID} +1 -`grep -n "${aCc}" ${CWD}/iDx.csv | head -n 1 | cut -f 1 -d ":"` ))
+  lOc1=$(( ${tID} +1 -`grep -n "${aCc}" iDx.csv | head -n 1 | cut -f 1 -d ":"` ))
 fi
 lOc2=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 3,4 -d "," | sed -e "s/,/../"`
 lOcNam=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 3,4 -d "," | sed -e "s/,//"`
@@ -33,6 +32,7 @@ head -n $(( ${seqLn} +1 )) ../data/${aCc}_cds.fa | tail -n 2 > ../data/${i2}+${l
 
 ##### dN/dS data extraction #####
 echo -e "`whereis Rscript`" > /dev/null # for some reason this echo line "wakes" container to use the R & lib path inside the container instead of host system
+cd /binHPC2
 for i4 in `seq 1 ${dbNum}`;do
     i1=`head -n ${i4} ../data/iDx.txt | tail -n 1`
     echo -e "`date` - ${i1}: ${i4} / ${dbNum}"
