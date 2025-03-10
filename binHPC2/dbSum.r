@@ -29,17 +29,20 @@ if(inFile==0){
   fNam = strsplit(fNam,"--")[[1]]
   fNam = c(fNam, sub(paste0("_",fNam[2]),"",fNam[1]))
   oNam = paste0(pT[1], paste0(fNam[3:2], collapse = "--"), "--dbSum.csv")
-  fLank = read.csv(paste0(pT[1],fNam[3],"-flanking.csv"), header = F)
   lGenome=".."
 }else{ # docker
   argv = inFile
   f = as.character(read.FASTA(argv, type="DNA"))
   fNam = strsplit(sub("-","+",sub("_db.fa","",sub("../data/","",argv))),"[+]")[[1]]
   oNam = sub("_db.fa","--dbSum.csv",argv)
-  fLank = read.csv(listGenome[grep("flank",listGenome)][grep(fNam[1],listGenome[grep("flank",listGenome)])], header = F)
   lGenome="../data"
 }
 listGenome = list.files(lGenome, recursive=T, include.dirs=F, full.names=T)
+if(inFile==0){
+  fLank = read.csv(paste0(pT[1],fNam[3],"-flanking.csv"), header = F)
+}else{
+  fLank = read.csv(listGenome[grep("flank",listGenome)][grep(fNam[1],listGenome[grep("flank",listGenome)])], header = F)
+}
 colnames(fLank) = c("index","PAnum","start","end","beforeGFlank","afterGFlank")
 
 ## PAO1 details
