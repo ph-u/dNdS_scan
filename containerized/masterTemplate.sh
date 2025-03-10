@@ -20,9 +20,9 @@ if [[ ${sTage} -eq 1 ]];then
 # 1. txt file containing accession numbers of reference genomes, one line per number
 # 2. csv/txt file containing accession numbers (clinical/environmental isolates) that will become part of the blast database (can be downloaded using NCBI tool `datasets`)
   mkdir -p ../data #&& apptainer pull docker://ghcr.io/ph-u/dnds_scan:latest
-  printf "Assembling configuration toml file (`date`)"
-  echo -e "[memory]\n    limit = 7088373760" > cgroups.toml
-  printf " -- Done (`date`)\n"
+#  printf "Assembling configuration toml file (`date`)"
+#  echo -e "[memory]\n    limit = 7088373760" > cgroups.toml
+#  printf " -- Done (`date`)\n"
 
 ##### Stage 1: Reference genome & blastn database segregation #####
   apptainer run --bind ../data:/data dnds_scan_latest.sif ref ${refG} &
@@ -49,7 +49,7 @@ else
     i=`echo -e "${L}" | rev | sed -e "s/ /@/" | cut -f 1 -d "@" | rev` # accession num
     iSt=`grep -n ${i} iDx.csv | head -n 1 | cut -f 1 -d ":"` # first cds in genome
     iEd=`grep -n ${i} iDx.csv | tail -n 1 | cut -f 1 -d ":"` # last cds in genome
-    echo -e "#!/bin/env bash\n# author: ph-u (docker container)\n# in: sbatch dNdS_${i}.sh\n# date: `date`\n#SBATCH -A ${gpNam}\n#SBATCH --nodes=1\n#SBATCH --ntasks=1\n#SBATCH --mail-type=NONE\n#SBATCH --requeue\n#SBATCH -p icelake-himem\n#SBATCH --time=12:00:00\n#SBATCH -J ${i}\n#SBATCH --array=${iSt}-${iEd}\n\napptainer run --apply-cgroups cgroups.toml --memory 6760M --bind ${PWD}/../data:/data dnds_scan_latest.sif dnds ${p0}" >> dNdS_${i}.sh
+    echo -e "#!/bin/env bash\n# author: ph-u (docker container)\n# in: sbatch dNdS_${i}.sh\n# date: `date`\n#SBATCH -A ${gpNam}\n#SBATCH --nodes=1\n#SBATCH --ntasks=1\n#SBATCH --mail-type=NONE\n#SBATCH --requeue\n#SBATCH -p icelake-himem\n#SBATCH --time=12:00:00\n#SBATCH -J ${i}\n#SBATCH --array=${iSt}-${iEd}\n\napptainer run --bind ${PWD}/../data:/data dnds_scan_latest.sif dnds ${p0}" >> dNdS_${i}.sh # --apply-cgroups cgroups.toml --memory 6760M
   done < ../data/freqSLURM.txt
   [[ -f dNdS_.sh ]]&&rm dNdS_.sh
 
