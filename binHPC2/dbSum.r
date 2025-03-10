@@ -12,7 +12,7 @@ argv = (commandArgs(T))
 if(length(grep("_db.fa", argv))>0){inFile=argv;setwd("/binHPC2")}else{inFile=0} # docker
 cat(argv,":",date(),"\n")
 
-source("src_dNdS.r"); library(ape); library(Biostrings)
+source("src_dNdS.r"); suppressMessages(library(ape)); suppressMessages(library(Biostrings))
 pT = paste0("../",c("data","binHPC2"),"/")
 aRg = list.files(pT[1],argv)
 argv = aRg[grep("_db.fa",aRg)]
@@ -23,20 +23,21 @@ db.flk = 100 # flanking region length
 
 ## import
 cat(date(),": dbSum.r data import start\n")
+listGenome = list.files("..", recursive=T, include.dirs=F, full.names=T)
 if(inFile==0){
   f = as.character(read.FASTA(paste0(pT[1], argv[1]), type="DNA"))
   fNam = sub("_db.fa","",argv)
   fNam = strsplit(fNam,"--")[[1]]
   fNam = c(fNam, sub(paste0("_",fNam[2]),"",fNam[1]))
   oNam = paste0(pT[1], paste0(fNam[3:2], collapse = "--"), "--dbSum.csv")
+  fLank = read.csv(paste0(pT[1],fNam[3],"-flanking.csv"), header = F)
 }else{ # docker
-  f = as.character(read.FASTA(inFile, type="DNA"))
   argv = inFile
+  f = as.character(read.FASTA(argv, type="DNA"))
   fNam = strsplit(sub("-","+",sub("_db.fa","",sub("../data/","",argv))),"[+]")[[1]]
   oNam = sub("_db.fa","--dbSum.csv",argv)
+  fLank = read.csv(listGenome[grep("flank",listGenome)][grep(fNam[1],listGenome[grep("flank",listGenome)])], header = F)
 }
-listGenome = list.files("..", recursive=T, include.dirs=F, full.names=T)
-fLank = read.csv(paste0(pT[1],fNam[3],"-flanking.csv"), header = F)
 colnames(fLank) = c("index","PAnum","start","end","beforeGFlank","afterGFlank")
 
 ## PAO1 details
@@ -44,6 +45,7 @@ pao1 = which(fLank$PAnum==fNam[2])
 pao1 = list(seq=paste0(f[[1]], collapse = ""), details=c(length(f[[1]]), as.numeric(fLank[pao1,3:4])), flanks=as.character(fLank[pao1,5:6]))
 
 ## set rec df
+cat(date(),": dbSum.r Setting data record format\n")
 r0.c = c("clinical","locus","varType","start","end","flank_befPc","flank_aftPc","dNdS","pN","pS","Nd","Sd","N","S")
 r0 = as.data.frame(matrix(nr = length(f)-1, nc = length(r0.c)))
 colnames(r0) = r0.c
@@ -55,6 +57,7 @@ if(file.exists(oNam)){
 }else{i0=1}
 
 ##### Process each db #####
+cat(date(),": dbSum.r Processing each database\n")
 if(i0 <= nrow(r0)){ for(i in i0:nrow(r0)){
     db.nam = strsplit(names(f)[i+1], ";")[[1]]
     db.nRec = strsplit(sub("_geno","@",db.nam[1]), "@")[[1]][1]

@@ -12,7 +12,7 @@ argv = (commandArgs(T))
 if(length(grep("_db.fa", argv))>0){inFile=argv;setwd("/binHPC2")}else{inFile=0} # docker
 cat(argv,":",date(),"\n")
 
-source("src_dNdS.r"); library(ape); library(Biostrings)
+source("src_dNdS.r"); suppressMessages(library(ape)); suppressMessages(library(Biostrings))
 pT = paste0("../",c("data","binHPC2"),"/")
 aRg = list.files(pT[1],argv)
 argv = aRg[grep("_db.fa",aRg)]
@@ -22,6 +22,7 @@ argv = aRg[grep("_db.fa",aRg)]
 aaLen.df = 67
 
 ## import
+cat(date(),": rDNDS.r Importing data\n")
 if(inFile==0){
   f = as.character(read.FASTA(paste0(pT[1], argv[1]), type="DNA"))
   fNam = sub("_db.fa","",argv)
@@ -29,8 +30,8 @@ if(inFile==0){
   fNam = c(fNam, sub(paste0("_",fNam[2]),"",fNam[1]))
   oNam = paste0(pT[1], paste0(fNam[3:2], collapse = "--"), "--rDNDS.csv")
 }else{ # docker
-  f = as.character(read.FASTA(inFile, type="DNA"))
   argv = inFile
+  f = as.character(read.FASTA(argv, type="DNA"))
   fNam = strsplit(sub("-","+",sub("_db.fa","",sub("../data/","",argv))),"[+]")[[1]]
   oNam = sub("_db.fa","--rDNDS.csv",argv)
 }
@@ -39,6 +40,7 @@ dbSum = read.csv(gsub("rDNDS","dbSum",oNam), header = T)
 rfSeq = paste0(f[[1]], collapse = "")
 
 ## set rec start point
+cat(date(),": rDNDS.r Setting data record format\n")
 r0.c = c("clinical","segVarType","ntStart","ntEnd","dNdS")
 if(file.exists(oNam) & file.info(oNam)$size>0){
     r0.p = read.csv(oNam, header = T)
@@ -47,6 +49,7 @@ if(file.exists(oNam) & file.info(oNam)$size>0){
 }else{i0=1; wRite = 0}
 
 ##### Process each db #####
+cat(date(),": rDNDS.r Processing sequence sliding windows\n")
 if(i0 <= nrow(dbSum)){ for(i in i0:nrow(dbSum)){ cat(i,"/",nrow(dbSum),"(",round(i/nrow(dbSum)*100),"% ;", dbSum$clinical[i],")", date(),"\n"); if(length(grep("SNP", dbSum$varType[i])) > 0){
     aaLen = aaLen.df
     db.sep = c(rfSeq, paste0(f[[i+1]], collapse = ""))
