@@ -12,9 +12,7 @@
 0. `bash masterTemplate.sh 3 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt`
 
 > [!WARNING]
-> Before running the d~N~/d~S~ scan, remember to check all fasta files for the databases are successfully downloaded from NCBI. You can check by contrasting between `wc -l < ../data/NCBI-accession-list-subset.txt` and `ls ../data/NCBI-accession-list-subset/*_genomic.fna | wc -l`  
-> NCBI will refuse frequent connections, so for a large set of genomes, smaller chunk sizes will lead to more frequent connection refusal.  
-> So you might need to **run step 2 multiple times**.
+> Might need to **run step 2 multiple times** to get all genomes for blast databases due to NCBI refusing frequent connections.
 
 ## Options
 - `proj-account`: the SLURM group account you have access to

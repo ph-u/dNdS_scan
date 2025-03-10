@@ -9,7 +9,7 @@
 
 argv = (commandArgs(T))
 #argv = "00_PAO1_107_PA0001_db.fa"
-if(length(grep("_db.fa", argv))>0){inFile=argv}else{inFile=0} # docker
+if(length(grep("_db.fa", argv))>0){inFile=argv;setwd("/binHPC2")}else{inFile=0} # docker
 cat(argv,":",date(),"\n")
 
 source("src_dNdS.r"); library(ape); library(Biostrings)
@@ -24,14 +24,16 @@ aaLen.df = 67
 ## import
 if(inFile==0){
   f = as.character(read.FASTA(paste0(pT[1], argv[1]), type="DNA"))
+  fNam = sub("_db.fa","",argv)
+  fNam = strsplit(fNam,"--")[[1]]
+  fNam = c(fNam, sub(paste0("_",fNam[2]),"",fNam[1]))
+  oNam = paste0(pT[1], paste0(fNam[3:2], collapse = "--"), "--rDNDS.csv")
 }else{ # docker
   f = as.character(read.FASTA(inFile, type="DNA"))
-  argv=inFile
+  argv = inFile
+  fNam = strsplit(sub("-","+",sub("_db.fa","",sub("../data/","",argv))),"[+]")[[1]]
+  oNam = sub("_db.fa","--rDNDS.csv",argv)
 }
-fNam = sub("_db.fa","",argv)
-fNam = strsplit(fNam,"--")[[1]]
-fNam = c(fNam, sub(paste0("_",fNam[2]),"",fNam[1]))
-oNam = paste0(pT[1], paste0(fNam[3:2], collapse = "--"), "--rDNDS.csv")
 
 dbSum = read.csv(gsub("rDNDS","dbSum",oNam), header = T)
 rfSeq = paste0(f[[1]], collapse = "")
