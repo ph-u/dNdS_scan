@@ -14,7 +14,7 @@
 > [!WARNING]
 > Might need to **run step 2 multiple times** to get all genomes for blast databases due to NCBI refusing frequent connections.
 
-## Options
+## Program Inputs
 - `proj-account`: the SLURM group account you have access to
 - `ref-genome-accession-list.txt`: a list of accession numbers (`GCA_*` or `GCF_*`) that are used as reference genome(s)
 - `NCBI-accession-list.txt`: a list of accession numbers that will be made into NCBI blast databases; you can use a metadata summary file (with accession numbers as the first column, with/without header) directly downloaded from the NCBI `datasets` tool (CSV format is acceptable)
@@ -34,4 +34,5 @@
 - `apptainer run --bind ../data:/data dnds_scan_latest.sif db NCBI-accession-list-subset.txt`
 - `apptainer run --bind ../data:/data dnds_scan_latest.sif dbChunks NCBI-accession-list.txt 20`
 - `apptainer run --bind ../data:/data dnds_scan_latest.sif dnds 2`
+- `apptainer run --bind ../data:/data dnds_scan_latest.sif reCon.r ../data/[xxx]--rDNDS.csv`
 - `apptainer shell --bind ../data:/data dnds_scan_latest.sif`

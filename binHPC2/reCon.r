@@ -9,24 +9,32 @@
 
 argv = (commandArgs(T))
 #argv = "00_PAO1_107_PA0001_db.fa"
+if(length(grep("_db.fa", argv))>0){inFile=argv;setwd("/binHPC2")}else{inFile=0} # docker
 cat(argv,":",date(),"\n")
 
-source("src_dNdS.r"); library(ape)
+source("src_dNdS.r"); suppressMessages(library(ape))
 pT = paste0("../",c("data","binHPC2"),"/")
 aRg = list.files(pT[1],argv)
 argv = aRg[grep("_db.fa",aRg)]
 
 ##### set work env #####
-fNam = sub("_db.fa","",argv)
-fNam = strsplit(fNam,"--")[[1]]
-fNam = c(fNam, sub(paste0("_",fNam[2]),"",fNam[1]))
-oNam = paste0(pT[1], paste0(fNam[3:2], collapse = "--"), "--reCon.csv")
+if(inFile==0){
+  f = as.character(read.FASTA(paste0(pT[1], argv[1]), type="DNA"))[[1]]
+  fNam = sub("_db.fa","",argv)
+  fNam = strsplit(fNam,"--")[[1]]
+  fNam = c(fNam, sub(paste0("_",fNam[2]),"",fNam[1]))
+  oNam = paste0(pT[1], paste0(fNam[3:2], collapse = "--"), "--reCon.csv")
+}else{ # docker
+  argv = inFile
+  f = as.character(read.FASTA(argv, type="DNA"))[[1]]
+  fNam = strsplit(sub("-","+",sub("_db.fa","",sub("../data/","",argv))),"[+]")[[1]]
+  oNam = sub("_db.fa","--reCon.csv",argv)
+}
 
 rDNDS = read.csv(gsub("reCon","rDNDS",oNam), header = T)
 
 ## set rec df
 r0.c = c("ntPos","codon","aaRes",paste0("dNdS.",c("min","1Q","2Q","mean","3Q","max")))
-f = as.character(read.FASTA(paste0(pT[1], argv[1]), type="DNA"))[[1]]
 r0.codon = paste0(f[c(T,F,F)],f[c(F,T,F)],f[c(F,F,T)])
 r0 = as.data.frame(matrix(nr=length(r0.codon), nc = length(r0.c)))
 colnames(r0) = r0.c
