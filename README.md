@@ -18,7 +18,7 @@
 - `proj-account`: the SLURM group account you have access to
 - `ref-genome-accession-list.txt`: a list of accession numbers (`GCA_*` or `GCF_*`) that are used as reference genome(s)
 - `NCBI-accession-list.txt`: a list of accession numbers that will be made into NCBI blast databases; you can use a metadata summary file (with accession numbers as the first column, with/without header) directly downloaded from the NCBI `datasets` tool (CSV format is acceptable)
-- `20`: recommended number of genomes in a blast database for whole genome d~N~/d~S~ scanning, could be higher for short ORF sequences (highest number tested: 750)
+- `20`: recommended number of genomes in a blast database for whole genome d<sub>N</sub>/d<sub>S</sub> scanning, could be higher for short ORF sequences (highest number tested: 750)
 
 ## Computational requirements
 
@@ -31,8 +31,8 @@
 ## Other Individual commands available
 
 - `apptainer run --bind ../data:/data dnds_scan_latest.sif ref ref-genome-accession-list.txt`: format reference genome only
-- `apptainer run --bind ../data:/data dnds_scan_latest.sif db NCBI-accession-list-subset.txt`
-- `apptainer run --bind ../data:/data dnds_scan_latest.sif dbChunks NCBI-accession-list.txt 20`
-- `apptainer run --bind ../data:/data dnds_scan_latest.sif dnds 2`
-- `apptainer run --bind ../data:/data dnds_scan_latest.sif reCon.r ../data/[xxx]--rDNDS.csv`
-- `apptainer shell --bind ../data:/data dnds_scan_latest.sif`
+- `apptainer run --bind ../data:/data dnds_scan_latest.sif db NCBI-accession-list-subset.txt`: download and generate one blastdb using the listed accession numbers from the file provided
+- `apptainer run --bind ../data:/data dnds_scan_latest.sif dbChunks NCBI-accession-list.txt 20`: segregate the full list of accession number into subsets of x accessions per group; in this command x=20
+- `apptainer run --bind ../data:/data dnds_scan_latest.sif dnds 2`: run one d<sub>N</sub>/d<sub>S</sub> scan on one gene, indicated by its line number (line = 2) in the overall gene list `iDx.csv`
+- `apptainer run --bind ../data:/data dnds_scan_latest.sif reCon.r ../data/[xxx]--rDNDS.csv`: run the residue-level d<sub>N</sub>/d<sub>S</sub> reconstruction script by providing a rolling d<sub>N</sub>/d<sub>S</sub> output from the program
+- `apptainer shell --bind ../data:/data dnds_scan_latest.sif`: interactive shell
