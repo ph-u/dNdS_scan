@@ -40,6 +40,7 @@ elif [[ ${sTage} -eq 2 ]];then
 
 else
 ##### Stage 3: Write & Run dN/dS calculations #####
+  [[ -f "../data/noHit.log" ]] && rm ../data/noHit.log
   printf "Assembling dN/dS run-script (`date`)"
 
   [[ `ls | grep -e "dNdS_G" | grep -e ".sh" | wc -l` -gt 0 ]]&&rm dNdS_G*.sh
