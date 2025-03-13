@@ -47,7 +47,7 @@ for i4 in `seq 1 ${dbNum}`;do
       Rscript dbSum.r ${i0}
       Rscript rDNDS.r ${i0}
     else
-      echo -e "${i2} - `echo -e "${i1}" | rev | cut -f 1 -d "/" | rev`" >> ../data/noHit.log
+      echo -e "${i2};${lOcNam};`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev`" >> ../data/noHit.log
     fi
 done
 

@@ -5,8 +5,7 @@
 
 ## Quick start
 
-1. `[[ -f dnds\_scan\_latest.sif ]]&&rm dnds_scan_latest.sif`
-0. `apptainer pull docker://ghcr.io/ph-u/dnds_scan:latest && apptainer run dnds_scan_latest.sif`
+1. `[[ -f dnds_scan_latest.sif ]] && rm dnds_scan_latest.sif && apptainer pull docker://ghcr.io/ph-u/dnds_scan:latest && apptainer run dnds_scan_latest.sif`
 0. `bash masterTemplate.sh 1 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt 20 &`
 0. `bash masterTemplate.sh 2 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt`
 0. `bash masterTemplate.sh 3 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt`
