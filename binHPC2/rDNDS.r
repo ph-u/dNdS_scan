@@ -74,6 +74,7 @@ if(i0 <= nrow(dbSum)){ for(i in i0:nrow(dbSum)){ cat(i,"/",nrow(dbSum),"(",round
     r0 = as.data.frame(matrix(nr = nrow(vt.df)-aaLen+1, nc = length(r0.c)))
     colnames(r0) = r0.c
     r0$clinical = dbSum$clinical[i]
+    r0$locus = dbSum$locus[i]
     r0$ntStart = vt.df$ntPos[1:(nrow(vt.df)-(aaLen-1))]
     r0$ntEnd = vt.df$ntPos[aaLen:nrow(vt.df)]+2
     r0$segVarType = "identical"; r0$dNdS = 0 # set default value; an identical segment in an SNP gene is assumed dN/dS == 0
