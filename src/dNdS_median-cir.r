@@ -46,8 +46,18 @@ p0 = ggplot() + theme_minimal() + coord_radial(r.axis.inside = T, inner.radius =
 #    geom_point(aes(x = 1:nrow(d.plt), y = 1, shape = d0$shape[match(d.plt[,1], d0$index)], size = d0$cex[match(d.plt[,1], d0$index)]))
 ggsave(paste0(pT[2],"dNdS_median-cir.pdf"), plot = p0, width = 10, height = 10)
 cat("Plot done:", date(), "\n")
+d.plt0 = d.plt[which(d.plt[,1] %in% colnames(dNdS.med)[c(1,3)]),]
 d.plt[,2] = round(d.plt[,2])
 write.csv(d.plt[,c(3,1,2)], paste0(pT[1],"dNdS_median-cir.csv"), quote = F, row.names = F)
+
+p0 = ggplot() + theme_minimal() + coord_radial(r.axis.inside = T, inner.radius = .3) +
+    xlab("") + ylab("") + ylim(0,3) +
+    scale_color_manual(values = set_names(cBp[1:ncol(dNdS.med)], colnames(dNdS.med)), name = "Sampling Source") +
+    scale_x_continuous(breaks = as.numeric(sub("PA","",Mbp$locusTag)), label = Mbp$loc) +
+    scale_y_continuous(breaks = 1:max(round(d.plt[,2]), na.rm = T), label = rep("",length(d0$tYpe[-nrow(d0)]))) +
+    theme(panel.grid = element_blank(), plot.margin = unit(c(-1,0,-1,0), "cm"), axis.text = element_text(size = 24), axis.text.y = element_text(angle = 45)) +
+    geom_point(aes(x = rep(1:nrow(dNdS.med), length(unique(d.plt0[,1]))), y = d.plt0[,2], group = d.plt0[,1], color = d.plt0[,1]))
+ggsave(paste0(pT[2],"dNdS_median-cir2.pdf"), plot = p0, width = 10, height = 10)
 
 ##### Neutral in CF, non-neutral in env & vice versa #####
 dNdS.med0 = dNdS.med[which(row.names(dNdS.med) %in% GTF$Locus.Tag[which(GTF$Feature.Type=="CDS")]),c(1,3)] # ORF, CF vs env only

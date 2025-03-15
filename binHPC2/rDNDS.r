@@ -41,16 +41,17 @@ rfSeq = paste0(f[[1]], collapse = "")
 
 ## set rec start point
 cat(date(),": rDNDS.r Setting data record format\n")
-r0.c = c("clinical","segVarType","ntStart","ntEnd","dNdS")
+r0.c = c("clinical","locus","segVarType","ntStart","ntEnd","dNdS")
 if(file.exists(oNam) & file.info(oNam)$size>0){
     r0.p = read.csv(oNam, header = T)
-    i0 = which(dbSum$clinical==r0.p$clinical[nrow(r0.p)])+1
-    rm(r0.p); wRite = 1
-}else{i0=1; wRite = 0}
+    if(!setequal(colnames(r0.p),r0.c)){i0=1; wRite = 0}else{
+        i0 = which(paste0(dbSum$clinical,dbSum$locus)==paste0(r0.p$clinical[nrow(r0.p)],r0.p$locus[nrow(r0.p)]))+1
+        wRite = 1
+};rm(r0.p)}else{i0=1; wRite = 0}
 
 ##### Process each db #####
 cat(date(),": rDNDS.r Processing sequence sliding windows\n")
-if(i0 <= nrow(dbSum)){ for(i in i0:nrow(dbSum)){ cat(i,"/",nrow(dbSum),"(",round(i/nrow(dbSum)*100),"% ;", dbSum$clinical[i],")", date(),"\n"); if(length(grep("SNP", dbSum$varType[i])) > 0){
+if(i0 <= nrow(dbSum)){ for(i in i0:nrow(dbSum)){ cat(i,"/",nrow(dbSum),"(",round(i/nrow(dbSum)*100),"% ;", dbSum$clinical[i],")", date(),"\n"); if(length(grep("SNP", dbSum$varType[i])) > 0 & dbSum$varType[i]!="noHit"){
     aaLen = aaLen.df
     db.sep = c(rfSeq, paste0(f[[i+1]], collapse = ""))
 
