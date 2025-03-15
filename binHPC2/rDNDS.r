@@ -44,10 +44,10 @@ cat(date(),": rDNDS.r Setting data record format\n")
 r0.c = c("clinical","locus","segVarType","ntStart","ntEnd","dNdS")
 if(file.exists(oNam) & file.info(oNam)$size>0){
     r0.p = read.csv(oNam, header = T)
-    if(!setequal(colnames(r0.p),r0.c)){i0=1; wRite = 0}else{
-        i0 = which(paste0(dbSum$clinical,dbSum$locus)==paste0(r0.p$clinical[nrow(r0.p)],r0.p$locus[nrow(r0.p)]))+1
-        wRite = 1
-};rm(r0.p)}else{i0=1; wRite = 0}
+    iTmp = unique(paste0(r0.p$clinical,r0.p$locus))
+    iDbs = paste0(dbSum$clinical,dbSum$locus)
+    for(i in 1:nrow(dbSum)){if(length(grep(iDbs,iTmp))==0){i0=i;wRite=1;break}};rm(i,r0.p,iTmp,iDbs)
+}else{i0=1; wRite = 0}
 
 ##### Process each db #####
 cat(date(),": rDNDS.r Processing sequence sliding windows\n")
