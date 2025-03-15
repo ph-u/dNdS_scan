@@ -79,7 +79,7 @@ if(i0 <= nrow(r0)){ for(i in i0:nrow(r0)){
             db.sep = c(as.character(db.sep@pattern), as.character(db.sep@subject))
             if(length(grep("-",db.sep))==0 & nchar(db.sep[1])==nchar(db.sep[2])){
                 r0$varType[i] = "SNP"
-                r0[i,grep("dNdS", colnames(r0)):ncol(r0)] = dNdS.rt(pao1$seq, db.seq)[[1]]
+                r0[i,grep("dNdS", colnames(r0)):ncol(r0)] = dNdS.rt(db.sep[1], db.sep[2])[[1]]
             }else{
 ## Identify indel type: count long seq insert -> codon -> 2bp -> 1bp
                 vt.frameshift = sum(strsplit(paste0(db.sep, collapse = ""), "")[[1]]=="-") %% 3
