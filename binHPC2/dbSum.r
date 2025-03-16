@@ -40,12 +40,13 @@ if(inFile==0){
 listGenome = list.files(lGenome, recursive=T, include.dirs=F, full.names=T)
 if(inFile==0){
   fLank = read.csv(paste0(pT[1],fNam[3],"-flanking.csv"), header = F)
+  colnames(fLank) = c("index","PAnum","start","end","beforeGFlank","afterGFlank")
   pao1 = which(fLank$PAnum==fNam[2])
 }else{
   fLank = read.csv(listGenome[grep("flank",listGenome)][grep(fNam[1],listGenome[grep("flank",listGenome)])], header = F)
+  colnames(fLank) = c("index","PAnum","start","end","beforeGFlank","afterGFlank")
   pao1 = which(fLank$PAnum==fNam[2] & paste0(fLank$start,fLank$end, sep = "")==fNam[3])
 }
-colnames(fLank) = c("index","PAnum","start","end","beforeGFlank","afterGFlank")
 
 ## PAO1 details
 pao1 = list(seq=paste0(f[[1]], collapse = ""), details=c(length(f[[1]]), as.numeric(fLank[pao1,3:4])), flanks=as.character(fLank[pao1,5:6]))

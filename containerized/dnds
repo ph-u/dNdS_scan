@@ -33,6 +33,7 @@ head -n $(( ${seqLn} +1 )) ../data/${aCc}_cds.fa | tail -n 2 | sed -e "s/^>/@/" 
 ##### dN/dS data extraction #####
 echo -e "`whereis Rscript`" > /dev/null # for some reason this echo line "wakes" container to use the R & lib path inside the container instead of host system
 cd /binHPC2
+i0="../data/${aCc}-${lOc}+${lOcNam}_db.fa"
 for i4 in `seq 1 ${dbNum}`;do
     i1=`head -n ${i4} ../data/iDx.txt | tail -n 1`
     echo -e "`date` - ${i1}: ${i4} / ${dbNum}"
@@ -41,15 +42,20 @@ for i4 in `seq 1 ${dbNum}`;do
     blastn -query ../data/${i2}+${lOcNam}.fa -db ../data/`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev` -out ../data/${aCc}+${lOcNam}.txt -outfmt "6 delim=@ qseqid sseqid sstart send sstrand sseq" -max_target_seqs $(( `wc -l < ../data/${i1}.txt` *2 )) -subject_besthit
     if [[ `grep -e "@" ../data/${aCc}+${lOcNam}.txt | wc -l` -gt 0 ]];then
       Rscript blastn2faByGene.r ../data/${aCc}+${lOcNam}.txt ../data/${i2}+${lOcNam}.fa ${i4}
-
-## dN/dS calculation
-      i0="../data/${aCc}-${lOc}+${lOcNam}_db.fa"
-      Rscript dbSum.r ${i0}
-      Rscript rDNDS.r ${i0}
-    else
+      if [[ ${i4} -gt 1 ]];then
+        tail -n +3 ${i0} >> ${i0}.1
+      else
+        cp ${i0} ${i0}.1
+      fi
+   else
       echo -e "${i2};${lOcNam};`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev`" >> ../data/noHit.log
     fi
 done
+
+## dN/dS calculation
+mv ${i0}.1 ${i0}
+Rscript dbSum.r ${i0}
+Rscript rDNDS.r ${i0}
 
 rm ../data/${i2}+${lOcNam}.fa
 rm ../data/${aCc}+${lOcNam}.txt
