@@ -54,8 +54,7 @@ done
 
 ## dN/dS calculation
 mv ${i0}.1 ${i0}
-Rscript dbSum.r ${i0}
-Rscript rDNDS.r ${i0}
+Rscript dbSum.r ${i0} && Rscript rDNDS.r ${i0}
 
 rm ../data/${i2}+${lOcNam}.fa
 rm ../data/${aCc}+${lOcNam}.txt
