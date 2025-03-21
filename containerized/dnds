@@ -42,7 +42,7 @@ for i4 in `seq 1 ${dbNum}`;do
 ## blast
     blastn -query ../data/${i2}+${lOcNam}.fa -db ../data/`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev` -out ../data/${aCc}+${lOcNam}.txt -outfmt "6 delim=@ qseqid sseqid sstart send sstrand sseq" -max_target_seqs $(( `wc -l < ../data/${i1}.txt` *2 )) -subject_besthit
    if [[ `grep -e "@" ../data/${aCc}+${lOcNam}.txt | wc -l` -gt 0 ]];then
-      Rscript blastn2faByGene.r ../data/${aCc}+${lOcNam}.txt ../data/${i2}+${lOcNam}.fa ${i4} && mv ../data/${aCc}-${lOc}+${lOcNam}_db.fa ${i0} && Rscript dbSum.r ${i0} && Rscript rDNDS.r ${i0}
+      Rscript blastn2faByGene.r ../data/${aCc}+${lOcNam}.txt ../data/${i2}+${lOcNam}.fa ${i4} && mv ../data/${aCc}-${lOc}+${lOcNam}_db.fa ${i0} && Rscript dbSum.r ${i0} && Rscript rDNDS.r ${i0} &
    else
       echo -e "${i2};${lOcNam};`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev`" >> ../data/noHit.log
    fi
