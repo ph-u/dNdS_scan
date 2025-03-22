@@ -13,6 +13,9 @@
 > [!WARNING]
 > Might need to **run step 2 multiple times** to get all genomes for blast databases due to NCBI refusing frequent connections.
 
+> [!NOTE]
+> Delete unnecessary (or extract designated) locus tags for your d<sub>N</sub>/d<sub>S</sub> reconstruction in the `iDx-selected.csv` file; locus tag order in this file does not matter!
+
 ## Program Inputs
 - `proj-account`: the SLURM group account you have access to
 - `ref-genome-accession-list.txt`: a list of accession numbers (`GCA_*` or `GCF_*`) that are used as reference genome(s)
