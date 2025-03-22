@@ -10,7 +10,7 @@
 source("p_src.r")
 library(lattice);library(ggmap);library(scatterpie);library(ggrepel)
 
-x0 <- table(mEta[,c("cOuntry","sOurce")])
+x0 <- table(mEta[which(mEta$sOurce %in% c("Cystic fibrosis","Environmental")),c("cOuntry","sOurce")])
 x1 = data.frame(cOuntry = row.names(x0), cOntinent = "Europe")
 x1[which(x1[,1]=="Unknown"),2] = "Unknown"
 x1[which(x1[,1] %in% c("Australia", "New Zealand")),2] = "Oceania"
@@ -47,7 +47,7 @@ names(cOl) = unique(mEta$sOurce)
 p0 = ggplot()+theme_bw()+coord_equal()+
     geom_point(data = map.world, aes(x=long, y=lat), cex=.1, color="#00000033")+
     geom_label_repel(aes(x=long, y=lat, label=cOuntry), data=x0, size=7, max.overlaps = getOption("ggrepel.max.overlaps", default = 40))+
-    geom_scatterpie(aes(x=long, y=lat, group=cOuntry, r=radius), data=x0, cols=colnames(x0)[1:length(unique(mEta$sOurce))], alpha=.5)+
+    geom_scatterpie(aes(x=long, y=lat, group=cOuntry, r=radius), data=x0, cols=colnames(x0)[1:2], alpha=.5)+ # length(unique(mEta$sOurce))
     geom_scatterpie_legend(x0$radius, x=-150, y=-20)+
     scale_y_continuous(limits = c(-60,90), expand = c(0, 0))+
     scale_fill_manual(values=cOl)
@@ -57,7 +57,7 @@ x0$radius = x0$radius/5
 p0 = ggplot()+theme_bw()+coord_equal()+
     geom_point(data = map.world, aes(x=long, y=lat), cex=.1, color="#00000033")+
     geom_label_repel(aes(x=long, y=lat, label=cOuntry), data=x0, size=7, max.overlaps = getOption("ggrepel.max.overlaps", default = 40))+
-    geom_scatterpie(aes(x=long, y=lat, group=cOuntry, r=radius), data=x0, cols=colnames(x0)[1:length(unique(mEta$sOurce))], alpha=.5)+
+    geom_scatterpie(aes(x=long, y=lat, group=cOuntry, r=radius), data=x0, cols=colnames(x0)[1:2], alpha=.5)+
     geom_scatterpie_legend(x0$radius, x=0, y=70)+
     scale_y_continuous(limits = c(25,80), expand = c(0, 0))+
     scale_x_continuous(limits = c(-15,30), expand = c(0, 0))+

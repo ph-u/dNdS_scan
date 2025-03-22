@@ -7,8 +7,9 @@
 # arg: 2
 # date: 20250222
 
-tID=$1
-i2=`head -n ${tID} iDx.csv | tail -n 1 | cut -f 1 -d ","` # Acc_locus, at ${CWD}
+STDtID=$1
+i2=`head -n ${STDtID} iDx-selected.csv | tail -n 1 | cut -f 1 -d ","` # Acc_locus, at ${CWD}
+tID=`grep -n ${i2} iDx.csv | cut -f 1 -d ":"`
 
 touch ../data/noHit.log
 aCc=`echo -e "${i2}" | cut -f 1 -d "_"` # accession number
