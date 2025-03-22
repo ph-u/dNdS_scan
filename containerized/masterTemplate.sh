@@ -48,8 +48,8 @@ else
 
   while read -r L;do
     i=`echo -e "${L}" | rev | sed -e "s/ /@/" | cut -f 1 -d "@" | rev` # accession num
-    iSt=`grep -n ${i} iDx.csv | head -n 1 | cut -f 1 -d ":"` # first cds in genome
-    iEd=`grep -n ${i} iDx.csv | tail -n 1 | cut -f 1 -d ":"` # last cds in genome
+    iSt=`grep -n ${i} iDx-selected.csv | head -n 1 | cut -f 1 -d ":"` # first cds in genome
+    iEd=`grep -n ${i} iDx-selected.csv | tail -n 1 | cut -f 1 -d ":"` # last cds in genome
     nNodes=`wc -l < ../data/iDx.txt`
     if [[ ${nNodes} -le 10 ]];then
       nTask=${nNodes}
