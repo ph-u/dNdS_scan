@@ -29,9 +29,9 @@ lOc3=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 4 -d 
 lOcNam=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 3,4 -d "," | sed -e "s/,//"`
 
 ## grab sequence by location on cds file
-rawCDS="../data/${aCc}-${lOc}+${lOcNam}.fa"
 seqLn=`grep -n ${lOc2} ../data/${aCc}_cds.fa | grep -e ${lOc3} | cut -f 1 -d ":"`
-head -n $(( ${seqLn} +1 )) ../data/${aCc}_cds.fa | tail -n 2 | sed -e "s/^>/@/" | sed -e "s/>/\!/g" | sed -e "s/^@/>/" > ${rawCDS}
+head -n $(( ${seqLn} +1 )) ../data/${aCc}_cds.fa | tail -n 2 | sed -e "s/^>/@/" | sed -e "s/>/\!/g" | sed -e "s/^@/>/" > ../data/${aCc}-${lOc}+${lOcNam}.fa
+rawCDS="../data/${aCc}-${lOc}+${lOcNam}.fa"
 
 ##### dN/dS data extraction #####
 echo -e "`whereis Rscript`" > /dev/null # for some reason this echo line "wakes" container to use the R & lib path inside the container instead of host system
