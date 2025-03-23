@@ -63,7 +63,7 @@ cat("Genome matching starts:",date(),"\n")
 cat("Genome matching done:",date(),"\n")
   if(e0==0){ r0 = c(srcG[sg0], dna0, x0) }else{ r0 = c(srcG[sg0], dna0) }
     if(length(argv)==3){ # docker container
-      write.FASTA(as.DNAbin(r0), sub("[.]txt","_db.fa",sub("_","-",argv[1])))
+      write.FASTA(as.DNAbin(r0), sub("[.]txt","_db.fa",argv[1]))
     }else{
       write.FASTA(as.DNAbin(r0),sub(".txt$",paste0("--",gNam,"_db.fa"),argv[1]))
     }
