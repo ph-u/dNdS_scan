@@ -39,8 +39,8 @@ cd /binHPC2
 for i4 in `seq 1 ${dbNum}`;do
 
 ## set filenames
-    i0=`echo -e "${rawCDS}" | sed -e "s/.fa$/-${i4}_db.fa"`
-    i3=`echo -e "${i0}" | sed -e "s/_db.fa$/.txt/"`
+    i0="../data/${aCc}-${lOc}+${lOcNam}-${i4}_db.fa"
+    i3="../data/${aCc}-${lOc}+${lOcNam}-${i4}.txt"
 
     i1=`head -n ${i4} ../data/iDx.txt | tail -n 1`
     echo -e "`date` - ${i1}: ${i4} / ${dbNum}"
