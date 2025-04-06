@@ -17,7 +17,7 @@ if(!file.exists(d.nam) | file.info(d.nam)$size < 3124638){
 ##### f: dN/dS volcano plot equation #####
     f.dNdS.volcano = function(x){
         x0 = c(log10(median(x[[1]]+1e-16, na.rm=T)), log10(median(x[[2]]+1e-16, na.rm=T)))
-        return(ifelse(x0[1]<x0[2],-1,1)*abs(log2(abs(x0[1]/x0[2]))))} # condition 1 more important (tend towards dN/dS conserved values) on the left, condition 2 more important on the rihgt
+        return(ifelse(x0[1]<x0[2],-1,1)*abs(log2(abs(x0[1]/x0[2]))))} # condition 1 more important (tend towards dN/dS conserved values) on the left, condition 2 more important on the right
 
 ##### Collect log2[dNdS-median]C & statistics from all genes #####
     f0 = list.files(pT[3], "dbSum")

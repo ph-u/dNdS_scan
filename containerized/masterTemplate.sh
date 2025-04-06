@@ -56,7 +56,7 @@ else
     else
       nTask=10
     fi
-    nNodes=`Rscript -e "cat(ceiling(${nNodes}/10),'\n')"`
+    nNodes=`Rscript -e "cat(ceiling(${nNodes}/5),'\n')"`
     echo -e "#!/bin/env bash\n# author: ph-u (docker container)\n# in: sbatch dNdS_${i}.sh\n# date: `date`\n#SBATCH -A ${gpNam}\n#SBATCH --nodes=${nNodes}\n#SBATCH --ntasks=${nTask}\n#SBATCH --mail-type=NONE\n#SBATCH --requeue\n#SBATCH -p icelake-himem\n#SBATCH --time=12:00:00\n#SBATCH -J ${i}\n#SBATCH --array=${iSt}-${iEd}\n\napptainer run --bind ${PWD}/../data:/data dnds_scan_latest.sif dnds ${p0}" >> dNdS_${i}.sh # --apply-cgroups cgroups.toml --memory 6760M
   done < ../data/freqSLURM.txt
   [[ -f dNdS_.sh ]]&&rm dNdS_.sh
