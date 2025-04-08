@@ -29,7 +29,7 @@ lOc3=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 4 -d 
 lOcNam=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 3,4 -d "," | sed -e "s/,//"`
 
 ## grab sequence by location on cds file
-seqLn=`grep -n "${lOc2}\.\." ../data/${aCc}_cds.fa | grep -e "${lOc3}" | cut -f 1 -d ":"`
+seqLn=`grep -n "${lOc2}\.\." ../data/${aCc}_cds.fa | grep -e "=${lOc}]" | grep -e "${lOc3}" | cut -f 1 -d ":"`
 head -n $(( ${seqLn} +1 )) ../data/${aCc}_cds.fa | tail -n 2 | sed -e "s/^>/@/" | sed -e "s/>/\!/g" | sed -e "s/^@/>/" > ../data/${aCc}-${lOc}+${lOcNam}.fa
 rawCDS="../data/${aCc}-${lOc}+${lOcNam}.fa"
 
