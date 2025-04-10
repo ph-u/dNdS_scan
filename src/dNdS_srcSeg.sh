@@ -16,6 +16,6 @@ echo -e "Processing: $1 - `date`"
 mkdir -p ../res/reConBIN
 Rscript dNdS_convert.r $1
 Rscript residueDNDS.r $1
-#rm ../data/*_$1_*--reCon.csv
+rm ../data/*_$1_*--reCon.csv
 mv ../res/$1_reCon.pdf ../res/reConBIN/$1_reCon.pdf
 exit

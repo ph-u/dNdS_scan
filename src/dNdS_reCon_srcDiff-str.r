@@ -7,8 +7,8 @@
 # arg: 2
 # date: 20240724
 
-#argv = (commandArgs(T))
-argv = c("PA2934","mean")
+argv = (commandArgs(T))
+#argv = c("PA2934","mean")
 source("p_src.r")
 
 rDNDS = read.csv(paste0(pT[3],list.files(pT[3],"-rDNDS")[grep(paste0("_",argv[1],"-"), list.files(pT[3],"-rDNDS"))]), header = T)

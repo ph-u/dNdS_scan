@@ -36,7 +36,10 @@ rawCDS="../data/${aCc}-${lOc}+${lOcNam}.fa"
 ##### dN/dS data extraction #####
 echo -e "`whereis Rscript`" > /dev/null # for some reason this echo line "wakes" container to use the R & lib path inside the container instead of host system
 cd /binHPC2
+
+max_jobs=24; cur_jobs=0
 for i4 in `seq 1 ${dbNum}`;do
+  ((cur_jobs >= max_jobs)) && wait -n # traffic control
 
 ## set filenames
     i0="../data/${aCc}-${lOc}+${lOcNam}-${i4}_db.fa"
@@ -48,7 +51,7 @@ for i4 in `seq 1 ${dbNum}`;do
 ## blast
     blastn -query ${rawCDS} -db ../data/`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev` -out ${i3} -outfmt "6 delim=@ qseqid sseqid sstart send sstrand sseq" -max_target_seqs $(( `wc -l < ../data/${i1}.txt` *2 )) -subject_besthit
    if [[ `grep -e "@" ${i3} | wc -l` -gt 0 ]];then
-      Rscript blastn2faByGene.r ${i3} ${rawCDS} ${i4} && Rscript dbSum.r ${i0} && Rscript rDNDS.r ${i0} && rm ${i3}
+      Rscript blastn2faByGene.r ${i3} ${rawCDS} ${i4} && Rscript dbSum.r ${i0} && Rscript rDNDS.r ${i0} && rm ${i3} & ((++cur_jobs)) # https://stackoverflow.com/questions/42211173/bash-script-to-run-a-constant-number-of-jobs-in-the-background
    else
       echo -e "${i2};${lOcNam};`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev`" >> ../data/noHit.log
    fi
