@@ -2,7 +2,7 @@
 # author: ph-u
 # script: dNdS_srcSeg.sh
 # desc: Segregate & plot dN/dS values by sources
-# in: bash dNdS_srcSeg.sh [gene]
+# in: bash dNdS_srcSeg.sh [gene] [del]
 # out: data/[strain]_[gene]_[src]--reCon.csv, res/[gene]_reCon.pdf
 # arg: 1
 # date: 20240424
@@ -16,6 +16,6 @@ echo -e "Processing: $1 - `date`"
 mkdir -p ../res/reConBIN
 Rscript dNdS_convert.r $1
 Rscript residueDNDS.r $1
-rm ../data/*_$1_*--reCon.csv
+[[ -z $2 ]]||rm ../data/*_$1_*--reCon.csv
 mv ../res/$1_reCon.pdf ../res/reConBIN/$1_reCon.pdf
 exit

@@ -1,0 +1,13 @@
+#!/bin/env bash
+# author: ph-u
+# script: rdnds
+# desc: Sliding window dN/dS calculation
+# in: dbsum [order within a `_db.fa` list]
+# out: NA
+# arg: 1
+# date: 20250813
+
+i0=`ls ../data/*_db.fa | head -n $1 | tail -n 1`
+Rscript rDNDS.r ${i0}
+
+exit

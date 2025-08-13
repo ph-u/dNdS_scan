@@ -46,5 +46,8 @@ hCut$CFenv = vOl$log2FC[match(hCut$PAnum, vOl$gene)]
 hCut$CFenv = ifelse(hCut$CFenv < 0,"CF","env")
 
 hCut = hCut[order(hCut[,1],hCut[,4],hCut[,3]),]
+#hCut$stringDB = gsub(",","&",string.gNam$annotation[match(hCut$PAnum,string.gNam$queryItem)])
+#hCut$GTF = gsub(",","&",GTF$Product.Description[match(hCut$PAnum,GTF$Locus.Tag)])
+#hCut$Uniprot = gsub(",","&",uniProt$Protein.names[match(GTF$UniProtKB.ID[match(hCut$PAnum,GTF$Locus.Tag)], uniProt$Entry.Name)])
 write.csv(hCut, paste0(pT[2], "string_diff.csv"), row.names = F, quote = F)
 for(i in 1:max(hCut$cID)){cat("Cluster",i,"\n");print(paste0(hCut$PAnum[which(hCut$cID==i)],collapse = ","))};rm(i)

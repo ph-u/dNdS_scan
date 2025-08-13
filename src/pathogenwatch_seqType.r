@@ -38,3 +38,10 @@ barplot(t(x), ylab = "sequence type frequency", xlab = "sequence type", main = p
 text(x = (1:nrow(x))*1.2, y = rowSums(x)+2, labels = ifelse(rowSums(x)>10,ifelse(nchar(rownames(x))>5,"",rownames(x)),""), srt = 90)
 legend("topright", legend = colnames(x), fill = cBp[1:ncol(x)])
 invisible(dev.off())
+
+jpeg(paste0(pT[2],"pathogenwatch_seqType.jpeg"), width = 1000, height = 700, res = 100)
+x = table(cf[,c(2,5)])
+barplot(t(x), ylab = "sequence type frequency", xlab = "sequence type", main = paste0("CF/environmental isolates: n = ",sum(x)), xaxt = "n", ylim = c(0,ceiling(max(x)/10)*10), col=cBp[(1:ncol(x))+2], border = "#00000000")
+text(x = (1:nrow(x))*1.2, y = rowSums(x)+1.2, labels = ifelse(rowSums(x)>10,ifelse(nchar(rownames(x))>5,"",rownames(x)),""), srt = 90)
+legend("topright", legend = colnames(x), fill = cBp[(1:ncol(x))+2])
+invisible(dev.off())

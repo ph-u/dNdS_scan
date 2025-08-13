@@ -7,9 +7,9 @@
 # arg: 0
 # date: 20240309
 
-library(ape)
+suppressMessages(library(ape))
 
-cBp = c();for(i in c("Okabe-Ito", "alphabet", "polychrome 36", "dark 2", "set 1", "classic tableau")){cBp = c(cBp, rev(palette.colors(palette = i, alpha=1, recycle = F)))};rm(i);cBp = unique(cBp);cBp = cBp[-11]
+cBp = c();for(i in c("Okabe-Ito", "alphabet", "polychrome 36", "dark 2", "set 1", "classic tableau")){cBp = c(cBp, rev(palette.colors(palette = i, alpha=1, recycle = F)))};rm(i);cBp = unique(cBp);cBpOri = cBp;cBp = cBp[-11]
 
 uniProt = read.table(paste0(pT[4],"uniprotkb_taxonomy_id_208964_2024_07_05.tsv"), header = T, sep = "\t", quote = "", comment = "")
 stringDB.c = strsplit(strsplit(readLines(paste0(pT[4],"208964.protein.links.full.v12.0.txt"), n=1), "[.]")[[1]], " ")[[1]]
@@ -20,9 +20,9 @@ protList = unname(unlist(read.csv(paste0(pT[1],"PAO1_proteins.txt"), header = F)
 f = list.files(pT[3],"_db.fa")
 f = data.frame(fNam=f, gEne=read.table(text=gsub("[.]csv","",f), sep = "_")[,4])
 
-library(pcaMethods) # https://doi.org/10.1093/bioinformatics/btm069, 10.18129/B9.bioc.pcaMethods
+suppressMessages(library(pcaMethods)) # https://doi.org/10.1093/bioinformatics/btm069, 10.18129/B9.bioc.pcaMethods
 # https://stats.stackexchange.com/questions/35561/imputation-of-missing-values-for-pca
-library(ggbiplot) # library(mixOmics)
+suppressMessages(library(ggbiplot)) # library(mixOmics)
 
 ##### f: capitalise first letter #####
 capFirst = function(x){return(paste0(toupper(substr(x,1,1)),substr(x,2,nchar(x))))}
@@ -75,4 +75,17 @@ GTF$gNam1 = string.gNam$preferredName[match(GTF$Locus.Tag,string.gNam$queryItem)
 GTF$gNam1[is.na(GTF$gNam1)] = GTF$gNam0[is.na(GTF$gNam1)]
 GTF$gNam = ifelse(GTF$gNam0==GTF$gNam1,GTF$gNam0,ifelse(substr(GTF$gNam0,1,2)=="PA",GTF$gNam1,ifelse(substr(GTF$gNam1,1,2)=="PA",GTF$gNam0,paste0(GTF$gNam0,"/",GTF$gNam1))))
 GTF$gNam0 = GTF$gNam1 = NULL
-rm(string.gNam)
+
+##### SeqType data into metadata #####
+stData = read.csv(paste0(pT[4],"pathogenwatch--j8j8npqh4cd4-paipcdinitial_all-typing.csv"), header = T)
+mEta$seqType = stData[match(mEta$assemblyInfo.genbankAssmAccession,stData$NAME),2]
+rm(stData)
+
+##### GO.Terms descriptions for Pseudomonas aeruginosa #####
+# GO.Terms to pathway text: https://www.ebi.ac.uk/QuickGO/annotations
+#GO.desc = read.csv(paste0(pT[4],"QuickGO-annotations.tsv"), sep = "\t", quote = "", header = T)
+
+##### PseudoCap tabular data #####
+iNterpro = read.table(paste0(pT[4],"featuresInterpro.txt"), header = T, sep = "\t", quote = "", comment.char = "")
+pAthway = read.table(paste0(pT[4],"pathways.txt"), header = T, sep = "\t", quote = "", comment.char = "")
+goTerms = read.table(paste0(pT[4],"gene_ontology_tab.txt"), header = T, sep = "\t", quote = "", comment.char = "")

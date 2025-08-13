@@ -9,8 +9,8 @@
 
 argv = (commandArgs(T))
 source("p_src.r")
-pRe = c("Cystic fibrosis", "Environmental", "Other infections", "Urban", "Unknown")
-#pRe = c("Cystic fibrosis", "Environmental")
+#pRe = c("Cystic fibrosis", "Environmental", "Other infections", "Urban", "Unknown")
+pRe = c("Cystic fibrosis", "Environmental")
 stP = 14
 
 for(i in 1:length(pRe)){
@@ -30,7 +30,7 @@ for(i in 1:length(pRe)){
 };rm(i, a)
 #pdf(paste0(pT[2], argv[1],"_reCon.pdf"), width = 50, height = 7)
 pdf(paste0(pT[2], argv[1],"_reCon.pdf"), width = 7, height = 14)
-par(mar = c(6,6,1,1)+.1, mfrow = c(5,1), cex.axis = 3, cex.lab = 3)
+par(mar = c(6,6,1,1)+.1, mfrow = c(5,1), cex.axis = 1.2, cex.lab = 3)
 
 matplot(x = row.names(p0), y = p0[,-(1:2)], type = "b", pch = stP:(stP-1+length(pRe)), col = cBp[1:length(pRe)], xlab = paste0(argv[1]," Residue position"), ylab = "dN/dS, 1Q", cex = .7)
 abline(h=1, col = "#000000aa", lty = 3, lwd = 2)

@@ -18,10 +18,12 @@ eSs[eSs=="Nonessential"] = 1
 for(i in 2:ncol(eSs)){eSs[,i] = as.numeric(eSs[,i])};rm(i)
 #setwd(pOri);rm(pOri)
 
-i = c("0604", "0606", "0923") # cluster 8; 4|13
+wN = read.table(paste0(pT[4],"science.adi0908_table_s5.txt"), sep = "\t", header = T, fill = T, quote = "")
+hL = wN$PAO1[which(!is.na(wN[,which(is.na(wN[nrow(wN),]))[1]]))]
+#i = c("0604", "0606", "0923") # cluster 8; 4|13
 #i = c("0180",1423,2020,4196,5165) # cluster 2
 #i = c("0424","0425","0762","0763","0958","0861","1288","1430","1798",2020,2426,2491,2492,3168,3458,3477,3545,3974,4266,4367,4522,4601,5291), sep = "")
-hL = paste0("PA",i, sep = "") # c("0674", 2282:2286) # c("0674", 4984, 5402:5407) # fixed for comparison with https://doi.org/10.1126/science.adi0908
+#hL = paste0("PA",i, sep = "") # c("0674", 2282:2286) # c("0674", 4984, 5402:5407) # fixed for comparison with https://doi.org/10.1126/science.adi0908
 
 library(EnhancedVolcano)
 
@@ -53,20 +55,20 @@ print(EnhancedVolcano(d.t,
     widthConnectors = .5))
 invisible(dev.off())
 
-d.t$p.LOG10 = -log10(d.t$p.val)
+#d.t$p.LOG10 = -log10(d.t$p.val)
 #pdf(paste0(pT[2],"dNdS_volHigh_",hL[1],"_",unique(d.t$cond1),"_",unique(d.t$cond2),"-man.pdf"), width = 50, height = 30)
-par(mar = c(10,10,1,1)+.1, cex.lab = 5, cex.axis = 7)
-plot(x = 1:nrow(d.t), y = d.t$p.LOG10,
+#par(mar = c(10,10,1,1)+.1, cex.lab = 5, cex.axis = 7)
+#plot(x = 1:nrow(d.t), y = d.t$p.LOG10,
 # x = extreme +FC (variable in CF), + = extreme -FC (conserved in CF), triangle = dN/dS indifferent between CF & env
-    pch = ifelse(d.t$gene %in% hL, 4,3), #ifelse(d.t$log2FC > 1, 4, ifelse(d.t$log2FC < (-1), 3, 2)),
-    xlab = "", ylab = bquote(~-Log[10] ~ italic(P)),
+#    pch = ifelse(d.t$gene %in% hL, 4,3), #ifelse(d.t$log2FC > 1, 4, ifelse(d.t$log2FC < (-1), 3, 2)),
+#    xlab = "", ylab = bquote(~-Log[10] ~ italic(P)),
 # big = essential genes (https://doi.org/10.1073/pnas.1419677112)
-    cex = 5, #ifelse(d.t$gene %in% eSs$Locus.ID[rowSums(eSs[,-1])==0], 5,2),
+#    cex = 5, #ifelse(d.t$gene %in% eSs$Locus.ID[rowSums(eSs[,-1])==0], 5,2),
 # orange = high mutational burden in CF (https://doi.org/10.1126/science.adi0908)
-    col = ifelse(d.t$gene %in% hL, cBp[3],paste0(substr(cBp[1],1,7),"99")))
+#    col = ifelse(d.t$gene %in% hL, cBp[3],paste0(substr(cBp[1],1,7),"99")))
 # text = gene with significance beyond threshold
-text(x = 1:nrow(d.t), y = d.t$p.LOG10+.3, labels = ifelse(d.t$p.LOG10>=10, d.t$gene,""), cex = 5, col = cBp[9])
-mtext("Genomic position", side = 1, cex = 10, padj = 1.4)
-abline(h = -log10(.1), lty = 2, lwd = 2, col = cBp[9])
+#text(x = 1:nrow(d.t), y = d.t$p.LOG10+.3, labels = ifelse(d.t$p.LOG10>=10, d.t$gene,""), cex = 5, col = cBp[9])
+#mtext("Genomic position", side = 1, cex = 10, padj = 1.4)
+#abline(h = -log10(.1), lty = 2, lwd = 2, col = cBp[9])
 #invisible(dev.off())
 #write.csv(d.t[which(d.t$gene %in% hL),], paste0(pT[1],"dNdS_volHigh_",hL[1],"_",unique(d.t$cond1),"_",unique(d.t$cond2),"-man.csv"), row.names = F, quote = F)
