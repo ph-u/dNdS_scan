@@ -9,5 +9,4 @@
 
 i0=`ls ../data/*_db.fa | head -n $1 | tail -n 1`
 Rscript rDNDS.r ${i0}
-
 exit
