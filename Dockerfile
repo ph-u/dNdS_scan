@@ -1,5 +1,5 @@
 FROM rocker/r-base:4.3.1
-RUN apt-get -y install wget ncbi-blast+ libxml2-dev libcurl4-openssl-dev libssl-dev liblapack-dev libblas-dev
+RUN apt-get update && apt-get -y install wget ncbi-blast+ libxml2-dev libcurl4-openssl-dev libssl-dev liblapack-dev libblas-dev
 RUN R -q -e "install.packages('BiocManager', dependencies = T);options(warn=2);install.packages('ape', version='5.8', dependencies = T);BiocManager::install('Biostrings', version = '3.18')"
 RUN ln -s /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.21.so /usr/lib/libRlapack.so
 RUN ln -s /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.21.so /usr/lib/libRblas.so
