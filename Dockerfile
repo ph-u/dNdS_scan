@@ -2,7 +2,7 @@ FROM rocker/r-ver:4.3.1
 RUN echo 'options(repos = c(CRAN = "https://cloud.r-project.org"))' >>"${R_HOME}/etc/Rprofile.site"
 ENV R_LIBS="/usr/local/lib/R/library"
 ENV LD_LIBRARY_PATH="/usr/lib/R/lib:/usr/lib:/usr/lib/x86_64-linux-gnu/openblas-pthread:${LD_LIBRARY_PATH}"
-RUN apt-get update && apt-get -y install wget ncbi-blast+ libxml2-dev libcurl4-openssl-dev libssl-dev liblapack-dev libblas-dev
+RUN apt-get update && apt-get -y install wget ncbi-blast+ libz-dev libxml2-dev libcurl4-openssl-dev libssl-dev liblapack-dev libblas-dev
 RUN R -q -e "install.packages('BiocManager', dependencies = T);options(warn=2);install.packages('ape', version='5.8', dependencies = T);BiocManager::install('Biostrings', version = '3.18')"
 RUN ln -s /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.21.so /usr/lib/libRlapack.so
 RUN ln -s /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.21.so /usr/lib/libRblas.so
