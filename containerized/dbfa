@@ -7,30 +7,20 @@
 # arg: 2
 # date: 20250222
 
-STDtID=$1
-i2=`head -n ${STDtID} iDx-selected.csv | tail -n 1 | cut -f 1 -d ","` # Acc_locus, at ${CWD}
-tID=`grep -n ${i2} iDx.csv | cut -f 1 -d ":"`
+tID=$1
+i2=`head -n ${tID} iDx-selected.csv | tail -n 1`
+aCc=`echo -e "${i2}" | cut -f 1 -d ","` # Acc_locus, at ${CWD}
+lSt=`echo -e "${i2}" | cut -f 2 -d ","`
+lEd=`echo -e "${i2}" | cut -f 3 -d ","`
+lOcNam=`echo -e "${lSt}${lEd}"`
+lOc=`grep -e "${lSt},${lEd}" ../data/${aCc}_cds-flanking.csv | cut -f 2 -d ","`
 
 touch ../data/noHit.log
-aCc=`echo -e "${i2}" | cut -f 1 -d "_"` # accession number
-lOc=`echo -e "${i2}" | sed -e "s/_/@/" | cut -f 2 -d "@"` # locus tag
 dbNum=`wc -l < ../data/iDx.txt`
 
 ##### query sequence from reference genome #####
-## identify the correct entry by sequence location
-numGene=`grep -e "${aCc}" ../data/freqSLURM.txt | rev | cut -f 2 -d " " | rev`
-if [[ ${tID} -lt ${numGene} ]];then
-  lOc1=${tID}
-else
-  lOc1=$(( ${tID} +1 -`grep -n "${aCc}" iDx.csv | head -n 1 | cut -f 1 -d ":"` ))
-fi
-lOc2=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 3 -d ","`
-lOc3=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 4 -d ","`
-lOcNam=`head -n ${lOc1} ../data/${aCc}_cds-flanking.csv | tail -n 1 | cut -f 3,4 -d "," | sed -e "s/,//"`
-
 ## grab sequence by location on cds file
-seqLn=`grep -n "${lOc2}\.\." ../data/${aCc}_cds.fa | grep -e "=${lOc}]" | grep -e "${lOc3}" | cut -f 1 -d ":"`
-head -n $(( ${seqLn} +1 )) ../data/${aCc}_cds.fa | tail -n 2 | sed -e "s/^>/@/" | sed -e "s/>/\!/g" | sed -e "s/^@/>/" > ../data/${aCc}-${lOc}+${lOcNam}.fa
+tail -n +`grep -n ${lSt} ../data/${aCc}_cds.fa | grep -e ${lEd} | grep -e ${lOc} | cut -f 1 -d ":"` ../data/${aCc}_cds.fa | head -n 2 > ../data/${aCc}-${lOc}+${lOcNam}.fa
 rawCDS="../data/${aCc}-${lOc}+${lOcNam}.fa"
 
 ##### dN/dS data extraction #####
@@ -49,11 +39,11 @@ for i4 in `seq 1 ${dbNum}`;do
     echo -e "`date` - ${i1}: ${i4} / ${dbNum}"
 
 ## blast
-    blastn -query ${rawCDS} -db ../data/`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev` -out ${i3} -outfmt "6 delim=@ qseqid sseqid sstart send sstrand sseq" -max_target_seqs $(( `wc -l < ../data/${i1}.txt` *2 )) -subject_besthit
+    blastn -query ${rawCDS} -db ../data/`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev` -out ${i3} -outfmt "6 delim=@ qseqid sseqid sstart send sstrand sseq" -max_target_seqs $(( `ls ../data/${i1}/ | wc -l` *2 )) -subject_besthit
    if [[ `grep -e "@" ${i3} | wc -l` -gt 0 ]];then
       Rscript blastn2faByGene.r ${i3} ${rawCDS} ${i4} && rm ${i3} & ((++cur_jobs)) # https://stackoverflow.com/questions/42211173/bash-script-to-run-a-constant-number-of-jobs-in-the-background
    else
-      echo -e "${i2};${lOcNam};`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev`" >> ../data/noHit.log
+      echo -e "${aCc};${lOcNam};`echo -e "${i1}" | rev | cut -f 1 -d "/" | rev`" >> ../data/noHit.log
    fi
 done;wait
 

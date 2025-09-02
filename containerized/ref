@@ -19,9 +19,9 @@ while read -r L;do
     bash 00_ffn2fa.sh ncbi_ref/data/${L}/cds_from_genomic.fna ../data/${L0}_cds
     bash 00_ffn2fa.sh `ls ncbi_ref/data/${L}/${L}*` ../data/${L0}_genomic
     bash gFlanking.sh ../data/${L0}_cds.fa ../data/${L0}_genomic.fa
-    cat ../data/${L0}_cds-flanking.csv | cut -f 2 -d "," > ../data/${L0}_iDx.csv
+    cat ../data/${L0}_cds-flanking.csv | cut -f 3,4 -d "," > ../data/${L0}_iDx.csv
     while read -r L1;do
-        echo -e "${L0}_${L1}" >> iDx.csv
+        echo -e "${L0},${L1}" >> iDx.csv
     done < ../data/${L0}_iDx.csv
     rm ../data/${L0}_iDx.csv
 done < $1
