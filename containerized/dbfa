@@ -20,7 +20,7 @@ dbNum=`wc -l < ../data/iDx.txt`
 
 ##### query sequence from reference genome #####
 ## grab sequence by location on cds file
-tail -n +`grep -n ${lSt} ../data/${aCc}_cds.fa | grep -e ${lEd} | grep -e ${lOc} | cut -f 1 -d ":"` ../data/${aCc}_cds.fa | head -n 2 > ../data/${aCc}-${lOc}+${lOcNam}.fa
+tail -n +`grep -n ${lSt} ../data/${aCc}_cds.fa | grep -e ${lEd} | grep -e ${lOc} | cut -f 1 -d ":"` ../data/${aCc}_cds.fa | head -n 2 | sed -e "s/>/</g" -e "s/</>/" > ../data/${aCc}-${lOc}+${lOcNam}.fa
 rawCDS="../data/${aCc}-${lOc}+${lOcNam}.fa"
 
 ##### dN/dS data extraction #####

@@ -9,6 +9,7 @@
 
 argv = (commandArgs(T))
 #argv = c("../data/1_GCA_000022165_STM14_2638.txt", "1_GCA_000022165_iDx.txt")
+#argv = c("../data/GCF0000058452-b1350+14147861417386-1.txt","../data/GCF0000058452-b1350+14147861417386.fa","1") ## 20250910
 library(ape)
 
 blastnRES = read.table(argv[1], sep = "@", header = F)
