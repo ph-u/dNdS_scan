@@ -10,7 +10,7 @@
 source("p_src.r")
 set.seed(8389)
 suppressMessages(library(igraph))
-mlst.st = read.csv(paste0(pT[2],"mlst_realphy--metadata.csv"), header = T)
+mlst.st = read.csv(paste0(pT[2],"mlst_REALPHY--metadata.csv"), header = T)
 mlst.id = read.csv(paste0(pT[2],"mlst_strainID.csv"), header = T, row.names = 1)
 gLen = read.csv(paste0(pT[1],"mlst_strainID--gLen.csv"), header = T)
 st.uniq = unique(mlst.st$seqType) # c(155,179,27)
@@ -26,7 +26,7 @@ i0 = c();for(i in 1:length(st.uniq)){
   i0 = c(i0,colSums(read.csv(paste0(pT[1], "mlst_stSNP--ST",st.uniq[i],".csv"), header = T, row.names = 1), na.rm = T))
 };rm(i)
 
-#write.csv(data.frame(group = colnames(mlst.id), SNP = i0, sameStrain = ifelse(i0<25e3,"Y","")), paste0(pT[2],"mlst_strainID--SNP.csv"), row.names = F, quote = F)
+write.csv(data.frame(group = colnames(mlst.id), SNP = i0, sameStrain = ifelse(i0<25e3,"Y","")), paste0(pT[2],"mlst_strainID--SNP.csv"), row.names = F, quote = F)
 
 ##### Build network graph #####
 net0 = data.frame(group = colnames(mlst.id), pair = i4, SNP = i0, sim = 1-i0/sum(gLen$gLen))

@@ -2,11 +2,15 @@
 # author: ph-u
 # script: dbsum
 # desc: Whole gene dN/dS calculation
-# in: dbsum [order within a `_db.fa` list]
+# in: dbsum [order within a `_db.fa` list] [-xsp (optional)]
 # out: NA
 # arg: 1
 # date: 20250813
 
 i0=`ls ../data/*_db.fa | head -n $1 | tail -n 1`
-Rscript dbSum.r ${i0}
+if [[ $2 -eq "-xsp" ]];then
+  Rscript dbSum.r ${i0} -xsp
+else
+  Rscript dbSum.r ${i0}
+fi
 exit

@@ -68,7 +68,8 @@ for(i in 1:length(pRaw)){
 pCa = prcomp(pcaRaw[,-(1:3)], center = T, scale. = T)
 
 i=3 #for(i in 2:3){
-  g0 = ggbiplot(pCa, var.scale = 1, labels = pcaRaw[,1], groups = pcaRaw[,i], ellipse = T, ellipse.prob = .95, labels.size = 5, var.axes = F) + theme_bw()+
+  g0 = ggbiplot(pCa, var.scale = 1, labels = pcaRaw[,1], groups = pcaRaw[,i], ellipse = T, ellipse.prob = .95, labels.size = 20, var.axes = F) + theme_bw()+
+    coord_cartesian(xlim = c(-3, 6)) +
     theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
     scale_color_manual(values=setNames(cBp[1:length(unique(pcaRaw[,i]))], unique(pcaRaw[,i])))
   ggsave(paste0(pT[2],"string_kegg--pca",ifelse(i==2,"Clus","CFev"),".jpeg"), plot = g0, width = 10, height = 10)
@@ -82,7 +83,8 @@ pcaRaw = pcaRaw[-nrow(pcaRaw),]
 
 pCa = prcomp(pcaRaw0, center = T, scale. = T)
 
-g0 = ggbiplot(pCa, var.scale = 1, labels = paste0("G",row.names(pcaRaw0)), labels.size = 5, var.axes = F) + theme_bw()+
+g0 = ggbiplot(pCa, var.scale = 1, labels = paste0("G",row.names(pcaRaw0)), labels.size = 20, var.axes = F) + theme_bw()+
+  coord_cartesian(xlim = c(-5, 2)) +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 ggsave(paste0(pT[2],"string_kegg--pcaClus.jpeg"), plot = g0, width = 10, height = 10)
 

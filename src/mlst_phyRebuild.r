@@ -71,6 +71,6 @@ legend("bottomright", legend = paste0("ST",levels(as.factor(mEta$seqType[match(s
 invisible(dev.off())
 
 ##### Extract metadata into from same seqeunce type, shared between CF & env within same country #####
-m0 = mEta[which(mEta$assemblyInfo.genbankAssmAccession %in% paste0("GCA_00",c(437542,383338,437416,437449,437448,437450,437552,397633,397637,383988,383996,383896,383887,383889,383881),"5.1")),c(3,16:18,13,15)]
+m0 = rbind(mEta[which(mEta$cOuntry == "Australia" & mEta$seqType %in% c(155,179) & mEta$sOurce %in% c("Cystic fibrosis","Environmental")),c(3,16:18,13,15)],mEta[which(mEta$cOuntry == "Canada" & mEta$seqType == 27 & mEta$sOurce %in% c("Cystic fibrosis","Environmental")),c(3,16:18,13,15)])
 m0[,ncol(m0)] = gsub(",",";",m0[,ncol(m0)])
 write.csv(m0[order(m0$seqType),], paste0(pT[2],"mlst_REALPHY--metadata.csv"), quote = F, row.names = F)

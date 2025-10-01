@@ -24,15 +24,17 @@ vOl = vOl[which(vOl$cond1=="Cystic fibrosis" & vOl$cond2=="Environmental"),]
 ##### Hierarchical Cluster Analysis #####
 hCa = hclust(dist(r0, method = "euclidean"), method = "ward.D2") # https://stats.stackexchange.com/questions/109949/what-algorithm-does-ward-d-in-hclust-implement-if-it-is-not-wards-criterion#109958
 
+hCut = data.frame(cID = h0 <- cutree(hCa, k=20))
+for(i in 0:length(hCa$labels)){if(all(h0==cutree(hCa, h=i))){break}}
 p0 = ggdendrogram(hCa, rotate = F, size = 1) +
     theme_minimal() + scale_y_reverse() + coord_radial(r.axis.inside = T, inner.radius = .3) +
     geom_text(aes(x=1:nrow(r0), y=-10, label = hCa$labels[hCa$order]), angle = ((1:nrow(r0))-1)/nrow(r0)*-360+90, size = 1) +
+    geom_hline(yintercept = i, col = cBp[2]) +
     theme(axis.text.x = element_blank())
 ggsave(paste0(pT[2], "string_diff.pdf"), plot = p0, width = 10, height = 10)
 #pdf(paste0(pT[2], "string_diff.pdf"), width = 10, height = 10)
 #plot(hCa, cex = .5, hang = -1)
 #invisible(dev.off())
-hCut = data.frame(cID = cutree(hCa, k=20))
 hCut$gEne = row.names(hCut)
 hCut = hCut[order(hCut$cID),]
 hCut$PAnum = ifelse(substr(hCut$gEne,1,2)=="PA",hCut$gEne,NA)

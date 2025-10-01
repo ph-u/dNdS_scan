@@ -21,9 +21,9 @@ x1[which(x1[,1] %in% c("Benin", "Republic of the Congo", "Tunisia")),2] = "Afric
 x1[which(x1[,1] %in% c("Georgia", "Israel")),2] = "Middle East"
 
 ##### Background distribution #####
-pdf(paste0(pT[2],"DataSrc--heat.pdf"), width = 10, height = 4)
+#pdf(paste0(pT[2],"DataSrc--heat.pdf"), width = 10, height = 4)
 print(levelplot(x0[order(x1$cOntinent),], scales=list(x=list(rot=90)), col.regions = gray(100:0/100), ylab = "Sample source", xlab = "Country"))
-invisible(dev.off())
+#invisible(dev.off())
 
 ##### Source mapping #####
 map.world = map_data("world")
@@ -42,7 +42,7 @@ x0[which(x0$cOuntry=="Canada"),"lat"] = 55
 x0[which(x0$cOuntry=="Unknown"),c("long","lat")] = c(-10,-40)
 
 cOl = cBp[1:length(unique(mEta$sOurce))]
-names(cOl) = unique(mEta$sOurce)
+names(cOl) = unique(mEta$sOurce)#[c(1,2,4,3,5)]
 
 p0 = ggplot()+theme_bw()+coord_equal()+
     geom_point(data = map.world, aes(x=long, y=lat), cex=.1, color="#00000033")+

@@ -2,7 +2,7 @@
 # author: ph-u
 # script: dbSum.r
 # desc: summarize database "_db.fa" blastn searches on one gene
-# in: Rscript dbSum.r [inFile_db.fa]
+# in: Rscript dbSum.r [inFile_db.fa] [-xsp (optional)]
 # out: data/[strain]_[gene]--dbSum.csv
 # arg: 1
 # date: 20240330 (branch from sumBLASTN.sh)
@@ -101,6 +101,7 @@ if(i0 <= nrow(r0)){ for(i in i0:nrow(r0)){
                         r0[i,grep("dNdS", colnames(r0)):ncol(r0)] = dNdS.rt(db.sep[1], db.sep[2])[[1]]
 		    }};r0$varType[i] = paste0("INDEL:FS",vt.frameshift,":",vt.fs1,":",vt.fs2,":",vt.fs3,":",vt.fs4,":",vt.t1) } }
 
+if(length(grep("-xsp", argv))>0){r0$flank_befPc[i] = r0$flank_aftPc[i] = NA}else{ ## adaptation for cross-lineage comparison
 ## flanking region similarity
         db.stEd = db.stEd + c(ifelse(db.nam[4]=="plus",-1,1),ifelse(db.nam[4]=="plus",1,-1))
         db.stEd = c(db.stEd[1]+(db.flk-1)*ifelse(db.nam[4]=="plus",-1,1), db.stEd[1], db.stEd[2], db.stEd[2]+(db.flk-1)*ifelse(db.nam[4]=="plus",1,-1))
@@ -120,6 +121,7 @@ if(i0 <= nrow(r0)){ for(i in i0:nrow(r0)){
         if(db.stEd[3]>1 & db.stEd[3]<length(db.f)){
             db.seq = paste0(db.f[db.stEd[3]:db.stEd[4]], collapse = "")
             r0$flank_aftPc[i] = pairwiseAlignment(tolower(substr(pao1$flanks[2], db.flk-nchar(db.seq)+1, nchar(pao1$flanks[2]))),tolower(db.seq), gapOpening = 0, gapExtension = 0, scoreOnly=T)/pairwiseAlignment(db.seq,db.seq, gapOpening = 0, gapExtension = 0, scoreOnly=T)*100 }
+}
 
 ##### export #####
     };write.csv(r0[!is.na(r0[,1]),], oNam, row.names = F, quote = F) } }

@@ -36,7 +36,7 @@
 - `apptainer run --bind ../data:/data dnds_scan_latest.sif db NCBI-accession-list-subset.txt`: download and generate one blastdb using the listed accession numbers from the file provided
 - `apptainer run --bind ../data:/data dnds_scan_latest.sif dbChunks NCBI-accession-list.txt 20`: segregate the full list of accession number into subsets of x accessions per group; in this command x=20
 - `apptainer run --bind ../data:/data dnds_scan_latest.sif dbfa 2`: construct one d<sub>N</sub>/d<sub>S</sub> sequence list on one gene, indicated by its line number (line = 2) in the overall gene list `iDx.csv`
-- `apptainer run --bind ../data:/data dnds_scan_latest.sif dbsum 2`: run one d<sub>N</sub>/d<sub>S</sub> scan (whole gene) on one gene sequence list, indicated by its line number (line = 2) in the overall gene list `iDx.csv`
+- `apptainer run --bind ../data:/data dnds_scan_latest.sif dbsum 2 -xsp`: run one d<sub>N</sub>/d<sub>S</sub> scan (whole gene) on one gene sequence list, indicated by its line number (line = 2) in the overall gene list `iDx.csv`; optional `-xsp` tag to turn off flanking regions similarity calculation
 - `apptainer run --bind ../data:/data dnds_scan_latest.sif rdnds 2`: run one d<sub>N</sub>/d<sub>S</sub> scan (sliding window) on one gene sequence list, indicated by its line number (line = 2) in the overall gene list `iDx.csv`
 - `apptainer run --bind ../data:/data dnds_scan_latest.sif reCon.r ../data/[xxx]--rDNDS.csv`: run the residue-level d<sub>N</sub>/d<sub>S</sub> reconstruction script by providing a rolling d<sub>N</sub>/d<sub>S</sub> output from the program
 - `apptainer shell --bind ../data:/data dnds_scan_latest.sif`: interactive shell

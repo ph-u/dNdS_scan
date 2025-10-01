@@ -9,7 +9,7 @@
 
 source("p_src.r")
 set.seed(123)
-mlst.st = read.csv(paste0(pT[2],"mlst_realphy--metadata.csv"), header = T)
+mlst.st = read.csv(paste0(pT[2],"mlst_REALPHY--metadata.csv"), header = T)
 f0 = list.files(pT[1],"mlst_stSNP", full.names = T)
 st.uniq = unique(mlst.st$seqType)
 

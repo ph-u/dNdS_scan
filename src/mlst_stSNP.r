@@ -17,7 +17,7 @@ oNam = paste0(pT[1],"mlst_stSNP--tmp.fa")
 #r0 = as.data.frame(matrix(nrow = nrow(f), ncol = length(stList)))
 #row.names(r0) = f$gEne
 r1 = vector(mode = "list", length = length(stList))
-names(r1) = colnames(r0) = paste0("ST",stList)
+names(r1) = paste0("ST",stList) # colnames(r0)
 for(i in 1:length(r1)){
   r1[[i]] = as.data.frame(matrix(nrow = nrow(f), ncol = choose(sum(stTarget$seqType==stList[i]),2)))
   row.names(r1[[i]]) = f$gEne
@@ -26,7 +26,7 @@ for(i in 1:length(r1)){
 ##### get Number of SNP positions for each gene #####
 cat(date(),": Start SNP counting\n")
 for(i0 in 1:nrow(f)){for(i in 1:length(stList)){
-  cat(date(),": Processing row",i0,"/",nrow(f),"; col",i,"/",length(stList),"\n")
+  cat(date(),": Processing gene",i0,"/",nrow(f),"; ST",i,"/",length(stList),"     \r")
   stGene = as.character(read.FASTA(paste0(pT[3],f$fNam[i0]), type = "DNA"))
   s0 = read.table(text = sub("_ASM","@",names(stGene)[-1]), sep = "@")[,1]
   s1 = stTarget[which(stTarget$seqType==stList[i]),1]
