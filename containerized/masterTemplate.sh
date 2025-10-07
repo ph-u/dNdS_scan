@@ -56,8 +56,17 @@ else
     else
       nTask=24
     fi
+
+    if [[ ${sTage} -eq 3 ]];then
+      sCript="dbfa"
+    elif [[ ${sTage} -eq 4 ]];then
+      sCript="dbsum"
+    else
+      sCript="rdnds"
+    fi
+
     nNodes=`Rscript -e "cat(ceiling(${nNodes}/10),'\n')"`
-    echo -e "#!/bin/env bash\n# author: ph-u (docker container)\n# in: sbatch dNdS_${i}.sh\n# date: `date`\n#SBATCH -A ${gpNam}\n#SBATCH --nodes=${nNodes}\n#SBATCH --ntasks=${nTask}\n#SBATCH --mail-type=NONE\n#SBATCH --requeue\n#SBATCH -p icelake-himem\n#SBATCH --time=12:00:00\n#SBATCH -J ${i}\n#SBATCH --array=${iSt}-${iEd}\n\napptainer run --bind ${PWD}/../data:/data dnds_scan_latest.sif dbfa ${p0}" >> dNdS_${i}.sh # --apply-cgroups cgroups.toml --memory 6760M
+    echo -e "#!/bin/env bash\n# author: ph-u (docker container)\n# in: sbatch dNdS_${i}.sh\n# date: `date`\n#SBATCH -A ${gpNam}\n#SBATCH --nodes=${nNodes}\n#SBATCH --ntasks=${nTask}\n#SBATCH --mail-type=NONE\n#SBATCH --requeue\n#SBATCH -p icelake-himem\n#SBATCH --time=12:00:00\n#SBATCH -J ${i}\n#SBATCH --array=${iSt}-${iEd}\n\napptainer run --bind ${PWD}/../data:/data dnds_scan_latest.sif ${sCript} ${p0}" >> dNdS_${i}.sh # --apply-cgroups cgroups.toml --memory 6760M
   done < ../data/freqSLURM.txt
   [[ -f dNdS_.sh ]]&&rm dNdS_.sh
 
