@@ -8,5 +8,8 @@
 # date: 20250813
 
 i0=`ls ../data/*_db.fa | head -n $1 | tail -n 1`
+echo -e "`whereis Rscript`" > /dev/null
+cd /binHPC2
+
 Rscript rDNDS.r ${i0}
 exit

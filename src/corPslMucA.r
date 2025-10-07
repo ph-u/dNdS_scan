@@ -27,11 +27,12 @@ for(i in 1:length(paLst)){
 ##### Extracting clinical isolates #####
 r0$clinical = read.table(text = gsub("_ASM", "@", r0$clinical), sep = "@")[,1]
 r0.c = r0[which(r0$clinical %in% mEta$assemblyInfo.genbankAssmAccession[grep("Cystic",mEta$sOurce)]),]
-r0.cIntact = data.frame(psl = apply(r0.c[,2:(ncol(r0.c)-1)], 1, function(x){length(grep("noHit", x))==0}), mucA = (r0.c$mucA %in% c("SNP","INDEL:SNP")))
+r0.cIntact = data.frame(psl = apply(r0.c[,2:(ncol(r0.c)-1)], 1, function(x){length(grep("noHit", x))==0}), mucA = (r0.c$mucA %in% c("SNP","INDEL:SNP")), acc = r0.c$clinical)
+write.csv(r0.cIntact, paste0(pT[1],"pslIntactness--data.csv"), row.names = F, quote = F)
 
 ##### mucA & lasR gene between intact and non-intact psl operon #####
-iGene0 = c("PA0763", "PA1430")
-for(iG in length(iGene0)){
+iGene0 = c("PA0763", "PA0905", "PA1097", "PA1430", "PA3622")
+for(iG in 1:length(iGene0)){
   mucA = as.character(read.FASTA(paste0(pT[3],f$fNam[which(f$gEne==iGene0[iG])]), type = "DNA"))
   names(mucA)[-1] = read.table(text = gsub("_ASM", "@", names(mucA)[-1]), sep = "@")[,1]
 
@@ -97,12 +98,14 @@ for(iG in length(iGene0)){
   for(i in 1:nrow(seqContrast)){if(any(seqContrast[i,-ncol(seqContrast)] > tHs)){seqContrast$oUtlier[i] = .3}else if(any(seqContrast[i,-ncol(seqContrast)] < -tHs)){seqContrast$oUtlier[i] = -.3}}
 
   tHs = which(!is.na(seqContrast$oUtlier))
-  jpeg(paste0(pT[2],ifelse(iG==1,"mucA","lasR"),"_pslIntactness.jpeg"), width = 2000, height = 1500, res = 300)
+  jpeg(paste0(pT[2],"pslIntactness--",GTF$gNam[grep(paste0("^",iGene0[iG],"$"),GTF$Locus.Tag)],".jpeg"), width = 2000, height = 1500, res = 300)
   par(mar = c(5,4,0,1)+.1)
   matplot(x = 1:nrow(seqContrast), y = seqContrast[,-ncol(seqContrast)], type = "l", lty = 1, lwd = 2, col = cBp, xlab = "Sequence order", ylab = "log10( Ratio of occurrence )")
-  text(x = tHs, y = seqContrast$oUtlier[tHs]*(runif(length(tHs))+.5), labels = tHs)
-  text(x = c(50,50), y = .3*c(-1,1), labels = c("With\ngene\nloss", "Intact"), cex = 2)
-  legend(ifelse(iG==1,"topright","bottomleft"), legend = capFirst(seq.c), fill = cBp)
+#  text(x = tHs, y = seqContrast$oUtlier[tHs]*(runif(length(tHs))+.5), labels = tHs)
+  if(iG==1){
+    text(x = c(50,50), y = .3*c(-1,1), labels = c("With\ngene\nloss", "Intact"), cex = 2)
+    legend(ifelse(iG==1,"topright","bottomleft"), legend = capFirst(seq.c), fill = cBp)
+  }
   invisible(dev.off())
 
 ##### Mutations in mucA #####
@@ -114,5 +117,11 @@ for(iG in length(iGene0)){
   };rm(i)
   print(mucA.dNdS <- dNdS.rt(paste0(mucA[[1]], collapse = ""), paste0(mucA.mut, collapse = "")))
 
-  write.csv(mucA.dNdS[[2]], paste0(pT[2],ifelse(iG==1,"mucA","lasR"),"_pslIntactness.csv"), row.names = F, quote = F)
+  write.csv(mucA.dNdS[[2]], paste0(pT[2],"pslIntactness--",GTF$gNam[grep(paste0("^",iGene0[iG],"$"),GTF$Locus.Tag)],".csv"), row.names = F, quote = F)
+
+## add in sequences of PAO1
+  seqContrast$aa = seqContrast$nt = ""
+  seqContrast$nt[seq(1,nrow(seqContrast),3)] = paste0(mucA[[1]][c(T,F,F)],mucA[[1]][c(F,T,F)],mucA[[1]][c(F,F,T)])
+  seqContrast$aa[seq(1,nrow(seqContrast)-3,3)] = strsplit(nt2prot(paste0(mucA[[1]], collapse = "")), "")[[1]]
+  write.csv(seqContrast, paste0(pT[2],"pslIntactness--",GTF$gNam[grep(paste0("^",iGene0[iG],"$"),GTF$Locus.Tag)],"_data.csv"), row.names = F, quote = F)
 };rm(iG, iGene0)

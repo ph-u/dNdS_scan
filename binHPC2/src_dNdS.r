@@ -41,8 +41,8 @@ nt2prot = function(ntSeq="atgggt"){
     for(i in 1:length(xSeq)){
         x1[i] = n2p(paste0(x0[xSeq[i]],x0[xSeq[i]+1],x0[xSeq[i]+2]))
         if(nchar(x1[i])>1){x1[i] = substr(x1[i],2,2)} # if amino acid residue is ambiguious, select one out (enable visualization, but could introduce protein structure error!!!)
-        if(x1[i]==9){break} }
-    return(paste0(x1[1:(i-1)], collapse=""))
+        if(x1[i]==9){return(paste0(x1[1:(i-1)], collapse=""))} }
+    return(paste0(x1, collapse=""))
 }
 
 nRp = function(cOdon="atg", n = "c", sIte = 1){ ## codon nt replacement
