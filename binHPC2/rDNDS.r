@@ -9,13 +9,17 @@
 
 argv = (commandArgs(T))
 #argv = "00_PAO1_107_PA0001_db.fa"
-if(length(grep("_db.fa", argv))>0){inFile=argv;setwd("/binHPC2")}else{inFile=0} # docker
-cat(argv,":",date(),"\n")
+if(length(grep("_db.fa", argv))>0){
+  inFile=argv[1];setwd("/binHPC2") # docker
+}else{
+  inFile=0
+  aRg = list.files(pT[1],paste0(argv[1],"_"))
+  argv[1] = aRg[grep("_db.fa",aRg)]
+}
+cat(argv[1],":",date(),"\n")
 
 source("src_dNdS.r"); suppressMessages(library(ape)); suppressMessages(library(Biostrings))
 pT = paste0("../",c("data","binHPC2"),"/")
-aRg = list.files(pT[1],argv)
-argv = aRg[grep("_db.fa",aRg)]
 
 ##### set work env #####
 ## fixed variables
@@ -25,15 +29,14 @@ aaLen.df = 67
 cat(date(),": rDNDS.r Importing data\n")
 if(inFile==0){
   f = as.character(read.FASTA(paste0(pT[1], argv[1]), type="DNA"))
-  fNam = sub("_db.fa","",argv)
+  fNam = sub("_db.fa","",argv[1])
   fNam = strsplit(fNam,"--")[[1]]
   fNam = c(fNam, sub(paste0("_",fNam[2]),"",fNam[1]))
   oNam = paste0(pT[1], paste0(fNam[3:2], collapse = "--"), "--rDNDS.csv")
 }else{ # docker
-  argv = inFile
-  f = as.character(read.FASTA(argv, type="DNA"))
-  fNam = strsplit(sub("-","+",sub("_db.fa","",sub("../data/","",argv))),"[+]")[[1]]
-  oNam = sub("_db.fa","--rDNDS.csv",argv)
+  f = as.character(read.FASTA(inFile, type="DNA"))
+  fNam = strsplit(sub("-","+",sub("_db.fa","",sub("../data/","",inFile))),"[+]")[[1]]
+  oNam = sub("_db.fa","--rDNDS.csv",inFile)
 }
 
 dbSum = read.csv(gsub("rDNDS","dbSum",oNam), header = T)
