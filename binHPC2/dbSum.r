@@ -9,13 +9,17 @@
 
 argv = (commandArgs(T))
 #argv = "1_GCA_000022165_STM14_0013"
-if(length(grep("_db.fa", argv))>0){inFile=argv;setwd("/binHPC2")}else{inFile=0} # docker
-cat(argv,":",date(),"\n")
+if(length(grep("_db.fa", argv))>0){
+  inFile=argv[1];setwd("/binHPC2") # docker
+}else{
+  inFile=0
+  aRg = list.files(pT[1],paste0(argv[1],"_"))
+  argv[1] = aRg[grep("_db.fa",aRg)]
+}
+cat(argv[1],":",date(),"\n")
 
 source("src_dNdS.r"); suppressMessages(library(ape)); suppressMessages(library(Biostrings))
 pT = paste0("../",c("data","binHPC2"),"/")
-aRg = list.files(pT[1],argv)
-argv = aRg[grep("_db.fa",aRg)]
 
 ##### set work env #####
 ## fixed variables
@@ -25,31 +29,35 @@ db.flk = 100 # flanking region length
 cat(date(),": dbSum.r data import start\n")
 if(inFile==0){
   f = as.character(read.FASTA(paste0(pT[1], argv[1]), type="DNA"))
-  fNam = sub("_db.fa","",argv)
+  fNam = sub("_db.fa","",argv[1])
   fNam = strsplit(fNam,"--")[[1]]
   fNam = c(fNam, sub(paste0("_",fNam[2]),"",fNam[1]))
   oNam = paste0(pT[1], paste0(fNam[3:2], collapse = "--"), "--dbSum.csv")
   lGenome=".."
 }else{ # docker
-  argv = inFile
-  f = as.character(read.FASTA(argv, type="DNA"))
-  fNam = strsplit(sub("-","+",sub("_db.fa","",sub("../data/","",argv))),"[+]")[[1]]
-  oNam = sub("_db.fa","--dbSum.csv",argv)
+  f = as.character(read.FASTA(inFile, type="DNA"))
+  fNam = strsplit(sub("-","+",sub("_db.fa","",sub("../data/","",inFile))),"[+]")[[1]]
+  oNam = sub("_db.fa","--dbSum.csv",inFile)
   lGenome="../data"
 }
 listGenome = list.files(lGenome, recursive=T, include.dirs=F, full.names=T)
-if(inFile==0){
-  fLank = read.csv(paste0(pT[1],fNam[3],"-flanking.csv"), header = F)
-  colnames(fLank) = c("index","PAnum","start","end","beforeGFlank","afterGFlank")
-  pao1 = which(fLank$PAnum==fNam[2])
+
+if(length(grep("-xsp", argv))>0){
+  pao1 = list(seq=paste0(f[[1]], collapse = ""), details=c(length(f[[1]]), rep("",2)), flanks=rep("",2))
 }else{
-  fLank = read.csv(listGenome[grep("flank",listGenome)][grep(fNam[1],listGenome[grep("flank",listGenome)])], header = F)
-  colnames(fLank) = c("index","PAnum","start","end","beforeGFlank","afterGFlank")
-  pao1 = which(fLank$PAnum==fNam[2] & paste0(fLank$start,fLank$end, sep = "")==fNam[3])
-}
+  if(inFile==0){
+    fLank = read.csv(paste0(pT[1],fNam[3],"-flanking.csv"), header = F)
+    colnames(fLank) = c("index","PAnum","start","end","beforeGFlank","afterGFlank")
+    pao1 = which(fLank$PAnum==fNam[2])
+  }else{
+    fLank = read.csv(listGenome[grep("flank",listGenome)][grep(fNam[1],listGenome[grep("flank",listGenome)])], header = F)
+    colnames(fLank) = c("index","PAnum","start","end","beforeGFlank","afterGFlank")
+    pao1 = which(fLank$PAnum==fNam[2] & paste0(fLank$start,fLank$end, sep = "")==fNam[3])
+  }
 
 ## PAO1 details
-pao1 = list(seq=paste0(f[[1]], collapse = ""), details=c(length(f[[1]]), as.numeric(fLank[pao1,3:4])), flanks=as.character(fLank[pao1,5:6]))
+  pao1 = list(seq=paste0(f[[1]], collapse = ""), details=c(length(f[[1]]), as.numeric(fLank[pao1,3:4])), flanks=as.character(fLank[pao1,5:6]))
+}
 
 ## set rec df
 cat(date(),": dbSum.r Setting data record format\n")
