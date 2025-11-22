@@ -64,16 +64,15 @@ cat(date(),": dbSum.r Setting data record format\n")
 r0.c = c("clinical","locus","varType","start","end","flank_befPc","flank_aftPc","dNdS","pN","pS","Nd","Sd","N","S")
 r0 = as.data.frame(matrix(nr = length(f)-1, nc = length(r0.c)))
 colnames(r0) = r0.c
-if(file.exists(oNam)){
-    r0.p = read.csv(oNam, header = T)
-    i0 = nrow(r0.p)+1
-    r0[1:nrow(r0.p),] = r0.p
-    rm(r0.p)
-}else{i0=1}
+
+tOk = sub("dbSum", "prog",oNam)
+if(file.exists(tOk)){ r0.p = read.csv(tOk, header = T) }
+else{ r0.p = data.frame(step=c("dbSum","rDNDS"), isolates=c(1,1)) }
+if(r0.p[1,2] > (length(f)-1)){cat(argv[1], "overall summary done:", date(), "\n");quit()}else{ i0 = r0.p[1,2] }
 
 ##### Process each db #####
 cat(date(),": dbSum.r Processing each database\n")
-if(i0 <= nrow(r0)){ for(i in i0:nrow(r0)){
+for(i in i0:nrow(r0)){
     db.nam = strsplit(names(f)[i+1], ";")[[1]]
     db.nRec = strsplit(sub("_geno","@",db.nam[1]), "@")[[1]][1]
     cat(date(),": ",i,"/",nrow(r0),"(",round(i/nrow(r0)*100),"% ;",db.nRec,")", date(), "\r")
@@ -132,5 +131,9 @@ if(length(grep("-xsp", argv))>0){r0$flank_befPc[i] = r0$flank_aftPc[i] = NA}else
 }
 
 ##### export #####
-    };write.csv(r0[!is.na(r0[,1]),], oNam, row.names = F, quote = F) } }
+    }; if(i>1){
+        write.table(r0[i,], oNam, sep = ",", col.names = F, row.names = F, quote = F, append = T)
+    }else{ write.csv(r0[1,], oNam, row.names = F, quote = F) }
+    r0.p[1,2] = i+1; write.csv(r0.p, tOk, row.names = F, quote = F)
+}
 cat(argv[1], "overall summary done:", date(), "\n")

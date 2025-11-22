@@ -45,16 +45,15 @@ rfSeq = paste0(f[[1]], collapse = "")
 ## set rec start point
 cat(date(),": rDNDS.r Setting data record format\n")
 r0.c = c("clinical","locus","segVarType","ntStart","ntEnd","dNdS")
-if(file.exists(oNam) & file.info(oNam)$size>0){
-    r0.p = read.csv(oNam, header = T)
-    iTmp = unique(paste0(r0.p$clinical,r0.p$locus))
-    iDbs = paste0(dbSum$clinical,dbSum$locus)
-    i0=nrow(dbSum);for(i in 1:nrow(dbSum)){if(length(grep(iDbs[i],iTmp))==0){i0=i;wRite=1;break}};rm(i,r0.p,iTmp,iDbs)
-}else{i0=1; wRite = 0}
+
+tOk = sub("rDNDS", "prog",oNam)
+if(file.exists(tOk)){ r0.p = read.csv(tOk, header = T) }
+else{ r0.p = data.frame(step=c("dbSum","rDNDS"), isolates=c(length(unique(dbSum$clinical)),1)) }
+if(r0.p[2,2] > (length(f)-1)){cat(argv[1], "sequence window dN/dS calculation done:", date(), "\n");quit()}else{ i0 = r0.p[2,2] }
 
 ##### Process each db #####
 cat(date(),": rDNDS.r Processing sequence sliding windows\n")
-if(i0 <= nrow(dbSum)){ for(i in i0:nrow(dbSum)){ cat(i,"/",nrow(dbSum),"(",round(i/nrow(dbSum)*100),"% ;", dbSum$clinical[i],")", date(),"\n"); if(length(grep("SNP", dbSum$varType[i])) > 0 & dbSum$varType[i]!="noHit"){
+for(i in i0:nrow(dbSum)){ cat(i,"/",nrow(dbSum),"(",round(i/nrow(dbSum)*100),"% ;", dbSum$clinical[i],")", date(),"\n"); if(length(grep("SNP", dbSum$varType[i])) > 0 & dbSum$varType[i]!="noHit"){
     aaLen = aaLen.df
     db.sep = c(rfSeq, paste0(f[[i+1]], collapse = ""))
 
@@ -88,5 +87,9 @@ if(i0 <= nrow(dbSum)){ for(i in i0:nrow(dbSum)){ cat(i,"/",nrow(dbSum),"(",round
 
 ##### export #####
     cat("Exporting",i,"/",nrow(dbSum),"(",dbSum$clinical[i],")",date(),"\n")
-    if(wRite==0){write.csv(r0, oNam, row.names = F, quote = F); wRite = 1}else{write.csv(rbind(read.csv(oNam, header = T),r0), oNam, row.names = F, quote = F)} } } }
+    if(i>1){
+        write.table(r0, oNam, sep = ",", col.names = F, row.names = F, quote = F, append = T)
+    }else{ write.csv(r0, oNam, row.names = F, quote = F) }
+    r0.p[2,2] = i+1; write.csv(r0.p, tOk, row.names = F, quote = F)
+}
 cat(argv[1], "sequence window dN/dS calculation done:", date(), "\n")
