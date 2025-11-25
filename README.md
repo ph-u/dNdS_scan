@@ -1,14 +1,18 @@
 # Quantifying natural selection
 
+[![DOI](https://zenodo.org/badge/754377636.svg)](https://doi.org/10.5281/zenodo.17714444)
+
 > [!NOTE]
 > Wang _et al_ 2025. Nature Communications. DOI: [10.1038/s41467-025-57532-z](https://doi.org/10.1038/s41467-025-57532-z)
 
 ## Quick start
 
 1. `[[ -f dnds_scan_latest.sif ]] && rm dnds_scan_latest.sif && apptainer pull docker://ghcr.io/ph-u/dnds_scan:latest && apptainer run dnds_scan_latest.sif`
-0. `bash masterTemplate.sh 1 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt 20 &`
-0. `bash masterTemplate.sh 2 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt`
-0. `bash masterTemplate.sh 3 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt`
+0. `bash masterTemplate.sh 1 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt 20 &` # Download and reformat the reference genome
+0. `bash masterTemplate.sh 2 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt` # Download comparing strains collected in different habitats
+0. `bash masterTemplate.sh 3 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt` # _blastn_ gene mapping
+0. `bash masterTemplate.sh 4 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt`# Whole-gene d _N_/d _S_
+0. `bash masterTemplate.sh 5 proj-account ref-genome-accession-list.txt NCBI-accession-list.txt` # Sliding window d _N_/d _S_
 
 > [!WARNING]
 > Might need to **run step 2 multiple times** to get all genomes for blast databases due to NCBI refusing frequent connections.
