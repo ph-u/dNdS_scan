@@ -66,8 +66,7 @@ r0 = as.data.frame(matrix(nr = length(f)-1, nc = length(r0.c)))
 colnames(r0) = r0.c
 
 tOk = sub("dbSum", "prog",oNam)
-if(file.exists(tOk)){ r0.p = read.csv(tOk, header = T) }
-else{ r0.p = data.frame(step=c("dbSum","rDNDS"), isolates=c(1,1)) }
+if(file.exists(tOk)){ r0.p = read.csv(tOk, header = T) }else{ r0.p = data.frame(step=c("dbSum","rDNDS"), isolates=c(1,1)) }
 if(r0.p[1,2] > (length(f)-1)){cat(argv[1], "overall summary done:", date(), "\n");quit()}else{ i0 = r0.p[1,2] }
 
 ##### Process each db #####

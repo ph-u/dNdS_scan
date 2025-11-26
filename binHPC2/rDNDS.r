@@ -47,8 +47,7 @@ cat(date(),": rDNDS.r Setting data record format\n")
 r0.c = c("clinical","locus","segVarType","ntStart","ntEnd","dNdS")
 
 tOk = sub("rDNDS", "prog",oNam)
-if(file.exists(tOk)){ r0.p = read.csv(tOk, header = T) }
-else{ r0.p = data.frame(step=c("dbSum","rDNDS"), isolates=c(length(unique(dbSum$clinical)),1)) }
+if(file.exists(tOk)){ r0.p = read.csv(tOk, header = T) }else{ r0.p = data.frame(step=c("dbSum","rDNDS"), isolates=c(length(unique(dbSum$clinical)),1)) }
 if(r0.p[2,2] > (length(f)-1)){cat(argv[1], "sequence window dN/dS calculation done:", date(), "\n");quit()}else{ i0 = r0.p[2,2] }
 
 ##### Process each db #####
