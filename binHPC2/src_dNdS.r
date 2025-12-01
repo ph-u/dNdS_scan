@@ -108,5 +108,5 @@ dNdS.rt = function(sAm = "atgaaacgcggctactaaa", rEf = "atgaaacccgggttttaaa"){ ##
 	NdSd = samNS(sAm,rEf);NS = seqNsite(rEf)
 	p = NdSd[[1]]/NS
 	dNdS0 = ifelse(any(p>.75) | any(is.na(p)),NA,log(1-4*p[1]/3)/log(1-4*p[2]/3)) #full eq: (-.75*log(1-4*p[1]/3))/(-.75*log(1-4*p[2]/3))
-	x = c(dNdS0,p,NdSd[[1]],NS);names(x) = c("dNdS","pN","pS","Nd","Sd","N","S")
+	x = abs(c(dNdS0,p,NdSd[[1]],NS));names(x) = c("dNdS","pN","pS","Nd","Sd","N","S")
 	return(list(x,NdSd[[2]]))}

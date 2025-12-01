@@ -11,7 +11,7 @@ i0=`ls ../data/*_db.fa | head -n $1 | tail -n 1`
 echo -e "`whereis Rscript`" > /dev/null
 cd /binHPC2
 
-if [[ $2 -eq "-xsp" ]];then
+if [[ $2 == "-xsp" ]];then
   Rscript dbSum.r ${i0} -xsp
 else
   Rscript dbSum.r ${i0}

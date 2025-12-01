@@ -90,5 +90,5 @@ for(i in i0:nrow(dbSum)){ cat(i,"/",nrow(dbSum),"(",round(i/nrow(dbSum)*100),"% 
         write.table(r0, oNam, sep = ",", col.names = F, row.names = F, quote = F, append = T)
     }else{ write.csv(r0, oNam, row.names = F, quote = F) }
     r0.p[2,2] = i+1; write.csv(r0.p, tOk, row.names = F, quote = F)
-}
+}}
 cat(argv[1], "sequence window dN/dS calculation done:", date(), "\n")
